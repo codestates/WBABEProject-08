@@ -12,8 +12,8 @@ type Router struct {
 
 func NewRouter(ctl *controller.Controller) *Router {
 	r := &Router{}
-	r.buyer = ctl.GetBuyer()
-	r.seller = ctl.GetSeller()
+	r.buyer = ctl.GetBuyerController()
+	r.seller = ctl.GetSellerController()
 
 	return r
 }
@@ -55,7 +55,7 @@ func (p *Router) Idx() *gin.Engine {
 	{
 		bRoute.GET("/getlist/:category")
 		bRoute.GET("/getreview/:menu")
-		bRoute.GET("/ordered:/orderid")
+		bRoute.GET("/ordered/:orderid")
 		bRoute.GET("/addreview")
 		bRoute.GET("/order")
 		bRoute.GET("/changeorder")
