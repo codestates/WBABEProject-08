@@ -20,7 +20,7 @@ type BuyerInfo struct {
 
 type OrderedList struct {
 	Id primitive.ObjectID `bson:"id" json:"id"`
-	IsReviewed bool `bson:"id" json:"id"`
+	IsReviewed bool `bson:"isreviewed" json:"isreviewed"`
 	Status string `bson:"status" json:"status"`
 	BuyerInfo BuyerInfo `bson:"buyerinfo" json:"buyerinfo"`
 	Orderedmenus []primitive.ObjectID `bson:"orderedmenus"`
@@ -31,7 +31,11 @@ func GetOrderedListModel(host, db, model string) (*OrderedListModel, error) {
 	var err error
 	
 	if m.Client, err = mongo.Connect(context.TODO(), options.Client().ApplyURI(host)); err != nil {
-		
+		return nil, err
+	} else if err := m.Client.Ping(context.TODO(), nil); err != nil {
+		return nil, err
+	} else {
+		m.Collection = m.Client.Database(db).Collection(model)
 	}
-
+	return m, nil
 }
