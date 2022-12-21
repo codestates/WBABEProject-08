@@ -1,7 +1,6 @@
 package route
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/codestates/WBABEProject-08/commits/main/controller"
 )
@@ -43,13 +42,26 @@ func (p *Router) Idx() *gin.Engine {
 	r.Use(gin.Recovery())
 	r.Use(CORS())
 
-	bRoute := r.Group("/buyer")
-	{
-		///
-	}
-
 	sRoute := r.Group("/seller")
 	{
-		///
+		sRoute.GET("/orderlist", p.seller.GetOrderList)
+		sRoute.GET("/statusupdate/:orderid", p.seller.UpdateOrderStatus)
+		sRoute.POST("/addmenu", p.seller.AddMenu)
+		sRoute.POST("/delete", p.seller.DeleteMenu)
+		sRoute.PUT("/updatemenu", p.seller.UpdateMenu)
 	}
+	
+	bRoute := r.Group("/buyer")
+	{
+		bRoute.GET("/getlist/:category")
+		bRoute.GET("/getreview/:menu")
+		bRoute.GET("/ordered:/orderid")
+		bRoute.GET("/addreview")
+		bRoute.GET("/order")
+		bRoute.GET("/changeorder")
+		bRoute.GET("/addorder")
+
+	}
+
+	return r
 }
