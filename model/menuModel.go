@@ -33,6 +33,7 @@ type Menu struct {
 	From string `bson:"from" json:"from"`
 	Orderedcount int `bson:"orderedcount" json:"orderedcount"`
 	Avg float64 `bson:"avg" json:"avg"`
+	Suggestion bool `bson:"suggestion" json:"suggestion"`
 	Reviews []Review `bson:"reviews,omitemepty" json:"reviews"`
 }
 
@@ -53,6 +54,7 @@ func GetMenuModel(db, host, model string) (*MenuModel, error) {
 
 // DB에 메뉴 data를 추가하는 메서드
 func (m *MenuModel) Add(data []byte) (primitive.ObjectID, error) {
+	fmt.Println("string: ", string(data))
 	newMenu := &Menu{}
 	json.Unmarshal(data, newMenu)
 
@@ -65,6 +67,7 @@ func (m *MenuModel) Add(data []byte) (primitive.ObjectID, error) {
 		return result.InsertedID.(primitive.ObjectID), nil
 	}
 }
+
 
 // DB 메뉴 data를 업데이트하는 메서드
 func (m *MenuModel) Update(data []byte) (interface{}, error) {
@@ -81,6 +84,7 @@ func (m *MenuModel) Update(data []byte) (interface{}, error) {
 	}
 }
 
+
 // DB 메뉴 data를 삭제하는 메서드
 func (m *MenuModel) Delete(data []byte) (interface{}, error) {
 	id, _, _ := util.GetJsonIdKeyValue(data)
@@ -93,6 +97,7 @@ func (m *MenuModel) Delete(data []byte) (interface{}, error) {
 		return result.DeletedCount, nil
 	}
 }
+
 
 // 메뉴 리스트를 조회하는 메서드
 func (m *MenuModel) GetList(category string) []Menu {
@@ -108,10 +113,6 @@ func (m *MenuModel) GetList(category string) []Menu {
 	return menus
 }
 
-// 메뉴별 평점/리뷰 데이터 조회하는 메서드
-func (m *MenuModel) GetReview() {
-
-}
 
 // 메뉴별 평점/리뷰 데이터 추가하는 메서드
 func (m *MenuModel) AddReview(sfoodId string, review *Review) {
@@ -126,6 +127,7 @@ func (m *MenuModel) AddReview(sfoodId string, review *Review) {
 	_, err := m.Menucollection.UpdateOne(context.TODO(), filter, update)
 	util.PanicHandler(err)
 }
+
 
 // 메뉴의 limit을 1 줄여주고 count를 1 올려주는 함수
 func (m *MenuModel) LimitAndCountUpdate(id primitive.ObjectID, limit, count int) {
@@ -162,6 +164,7 @@ func (m *MenuModel) GetOneMenu(id primitive.ObjectID) (*Menu, error) {
 	}
 }
 
+
 // 음식 평점의 평균을 구해주는 함수
 func (m *MenuModel) CalcAvg(sid string) {
 	id := util.ConvertStringToObjectId(sid)
@@ -176,8 +179,41 @@ func (m *MenuModel) CalcAvg(sid string) {
 	avg /= float64(len(menu.Reviews))
 
 	filter := bson.D{{Key: "_id", Value: id}}
-	update := bson.D{{Key: "$set", Value: bson.D{{Key: "avg", Value: avg}}}}
+	update := bson.D{
+		{Key: "$set", Value: bson.D{
+			{Key: "avg", Value: avg},
+		},
+	}}
 	_, err := m.Menucollection.UpdateOne(context.TODO(), filter, update)
 
 	util.PanicHandler(err)
+}
+
+
+// 추천메뉴를 업데이트하는 메서드
+func (m *MenuModel) SuggestionUpdate(suggestion *SuggestionType) error {
+	// 먼저, 원래 suggestion 되어있던 메뉴들을 초기화해준다.
+	filter := bson.D{
+		{Key : "suggestion", Value : true},
+	}
+	update := bson.D{{
+		Key : "$set", Value : bson.D{
+			{Key: "suggestion", Value : false},
+		},
+	}}
+	_, err := m.Menucollection.UpdateMany(context.TODO(), filter, update)
+	util.PanicHandler(err)
+
+	// 이후 새로운 아이디의 음식들을 업데이트해준다.
+	// 배열 핸들링
+	filter = bson.D{{Key: "_id", Value: bson.D{{Key: "$in", Value: suggestion.Ids}}}}
+	update = bson.D{{
+		Key : "$set", Value : bson.D{
+			{Key: "suggestion", Value : true},
+		},
+	}}
+
+	_, err = m.Menucollection.UpdateMany(context.TODO(), filter, update)
+
+	return err
 }
