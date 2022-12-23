@@ -73,7 +73,7 @@ func (o *OrderedListModel) GetOne(id primitive.ObjectID) *OrderedList {
 	return list
 }
 
-// 요청받은 주문의 진행상태 업데이트 하는 메서드
+// 주문의 진행상태 업데이트 하는 메서드
 func (o *OrderedListModel) UpdateStatus() {
 
 }

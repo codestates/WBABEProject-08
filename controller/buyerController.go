@@ -31,7 +31,16 @@ func (bc *BuyerController) GetMenuList(c *gin.Context) {
 
 // 메뉴별 평점/리뷰 데이터 조회하는 함수
 func (bc *BuyerController) GetReview(c *gin.Context) {
-
+	id := util.ConvertStringToObjectId(c.Param("menuid"))
+	menu, err := bc.MenuModel.GetOneMenu(id)
+	if err != nil {
+		c.JSON(404, gin.H{"error" : err})
+		return
+	} else if len(menu.Reviews) == 0 {
+		c.JSON(200, gin.H{"msg" : "현재 리뷰가 없습니다."})
+		return
+	} 
+	c.JSON(200, gin.H{"평점" : menu.Avg, "리뷰" : menu.Reviews})
 }
 
 // 현재 주문의 상태를 조회하는 함수
