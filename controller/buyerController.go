@@ -45,7 +45,15 @@ func (bc *BuyerController) GetReview(c *gin.Context) {
 
 // 현재 주문의 상태를 조회하는 함수
 func (bc *BuyerController) GetOrderStatus(c *gin.Context) {
-
+	orderId := util.ConvertStringToObjectId(c.Param("orderid"))
+	order := bc.OrderedListModel.GetOne(orderId)
+	// 존재하지 않는 id를 입력했을때의 처리
+	if len(order.Orderedmenus) == 0 {
+		c.JSON(200, gin.H{"msg" : "존재하지 않는 주문입니다."})
+		return
+	} else {
+		c.JSON(200, gin.H{"현재 주문 상태" : order.Status})
+	}
 }
 
 // 메뉴에 대한 평점 및 리뷰를 작성하는 함수

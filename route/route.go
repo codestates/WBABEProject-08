@@ -55,7 +55,7 @@ func (p *Router) Idx() *gin.Engine {
 	{
 		bRoute.GET("/getlist/:category", p.buyer.GetMenuList)
 		bRoute.GET("/getreview/:menuid", p.buyer.GetReview)
-		bRoute.GET("/ordered/:orderid")
+		bRoute.GET("/ordered/:orderid", p.buyer.GetOrderStatus)
 		bRoute.POST("/addreview/:foodid", p.buyer.AddReview)
 		bRoute.POST("/order", p.buyer.Order)
 		bRoute.GET("/changeorder")
