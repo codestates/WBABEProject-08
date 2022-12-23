@@ -6,7 +6,7 @@ import (
 
 // 메뉴를 추가할 때 body에 해당하는 구조체
 type AddMenuStruct struct {
-	NewOrder OrderedList
-	NewItem primitive.ObjectID
-	OrderId primitive.ObjectID
+	NewOrder OrderedList `json:"neworder"`
+	NewItem primitive.ObjectID `json:"newitem"`
+	OrderId primitive.ObjectID `json:"orderid"`
 }
