@@ -51,37 +51,49 @@ func (p *Router) Idx() *gin.Engine {
 
 	sGroup := r.Group("/seller")
 	{
-		// 전체 주문 목록 가져오기 + 페이지네이션
+		// 전체 주문 목록 가져오기 + 페이지네이션 -> swagger
 		sGroup.GET("/order", p.seller.GetOrderList)
-		// 주문 상태 변경
+
+		// 주문 상태 변경 -> swagger
 		sGroup.PATCH("/order", p.seller.UpdateOrderStatus)
-		// 메뉴 추가하기
+
+		// 메뉴 추가하기 -> swagger
 		sGroup.POST("/menu", p.seller.AddMenu)
-		// 메뉴 업데이트하기
+
+		// 메뉴 업데이트하기 -> swagger
 		sGroup.PATCH("/menu", p.seller.UpdateMenu)
-		// 메뉴 지우기
+
+		// 메뉴 지우기 -> swagger
 		sGroup.POST("/delete", p.seller.DeleteMenu)
-		// 추천메뉴 설정하기
+
+		// 추천메뉴 설정하기 -> swagger
 		sGroup.PATCH("/suggestion", p.seller.SuggestMenu)
 	}
 	
 	bGroup := r.Group("/buyer")
 	{
-		// 전체 메뉴 가져오기 + 페이지네이션
+		// 전체 메뉴 가져오기 + 페이지네이션 -> swagger
 		bGroup.GET("/menu", p.buyer.GetAll)
-		// 카테고리별 메뉴 정렬하여 가져오기(추천, 평점, 구매횟수) + 페이지네이션
+
+		// 카테고리별 메뉴 정렬하여 가져오기(추천, 평점, 구매횟수) + 페이지네이션 -> swagger
 		bGroup.GET("/menu/:category", p.buyer.GetMenuList)
-		// 메뉴별 리뷰 가져오기
+
+		// 메뉴별 리뷰 가져오기 -> swagger
 		bGroup.GET("/review/:menuid", p.buyer.GetReview)
-		// 주문한 음식에 대한 리뷰 작성
+
+		// 주문한 음식에 대한 리뷰 작성 -> swagger
 		bGroup.POST("/review/:menuid", p.buyer.AddReview)
-		// 주문 상태 가져오기
+
+		// 주문 상태 가져오기 -> swagger
 		bGroup.GET("/order/:orderid", p.buyer.GetOrderStatus)
-		// 주문하기
+
+		// 주문하기 -> swagger
 		bGroup.POST("/order", p.buyer.Order)
-		// 주문에 메뉴 추가하기
+
+		// 주문에 메뉴 추가하기 -> swagger
 		bGroup.PATCH("/order/add", p.buyer.AddOrder)
-		// 주문에서 메뉴 바꾸기
+
+		// 주문에서 메뉴 바꾸기 -> swagger
 		bGroup.PATCH("/order/change", p.buyer.ChangeOrder)
 	}
 

@@ -1,4 +1,444 @@
+definitions:
+  model.AddMenuDataType:
+    properties:
+      avg:
+        type: integer
+      from:
+        type: string
+      limit:
+        type: integer
+      name:
+        type: string
+      orderable:
+        type: boolean
+      orderedcount:
+        type: integer
+      price:
+        type: integer
+      suggestion:
+        type: boolean
+    type: object
+  model.AddMenusType:
+    properties:
+      newItem:
+        type: string
+      neworder:
+        $ref: '#/definitions/model.AddOrderType'
+      orderId:
+        type: string
+    type: object
+  model.AddOrderType:
+    properties:
+      buyerinfo:
+        $ref: '#/definitions/model.BuyerInfo'
+      isReviewed:
+        type: boolean
+      orderedmenus:
+        items:
+          type: string
+        type: array
+      status:
+        type: string
+    type: object
+  model.BuyerInfo:
+    properties:
+      address:
+        type: string
+      pnum:
+        type: string
+    type: object
+  model.ChangeMenuType:
+    properties:
+      legacyfoodid:
+        type: string
+      newfoodid:
+        type: string
+      orderid:
+        type: string
+    type: object
+  model.IdType:
+    properties:
+      id:
+        type: string
+    type: object
+  model.Menu:
+    properties:
+      avg:
+        type: number
+      from:
+        type: string
+      id:
+        type: string
+      limit:
+        type: integer
+      name:
+        type: string
+      orderable:
+        type: boolean
+      orderedcount:
+        type: integer
+      price:
+        type: integer
+      reviews:
+        items:
+          $ref: '#/definitions/model.Review'
+        type: array
+      suggestion:
+        type: boolean
+    type: object
+  model.Review:
+    properties:
+      orderId:
+        type: string
+      review:
+        type: string
+      score:
+        type: integer
+    type: object
+  model.SuggestionType:
+    properties:
+      ids:
+        items:
+          type: string
+        type: array
+    type: object
+  model.UpdateMenuDataType:
+    properties:
+      id:
+        type: string
+      key:
+        type: string
+      value:
+        type: string
+    type: object
 info:
   contact: {}
-paths: {}
+paths:
+  /buyer/menu:
+    get:
+      consumes:
+      - application/json
+      description: 모든 메뉴 리스트를 가져오기 위한 함수
+      parameters:
+      - description: page
+        in: query
+        name: page
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: 모든 메뉴를 가져옵니다. 페이지당 5개의 데이터를 가지고 있습니다.
+  /buyer/menu/{category}:
+    get:
+      consumes:
+      - application/json
+      description: 카테고리별 메뉴 리스트를 정렬하여 가져오기 위한 함수
+      parameters:
+      - description: category
+        in: path
+        name: category
+        required: true
+        type: string
+      - description: page
+        in: query
+        name: page
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: 조건에 맞는 메뉴들을 정렬하여 가져옵니다. 각 카테고리는 추천(suggestion), 평점(avg), 주문 수(orderedcount)로
+        이루어져 있으며, 페이지별 5개의 data를 반환합니다.
+  /buyer/order:
+    post:
+      consumes:
+      - application/json
+      description: 주문을 하는 함수
+      parameters:
+      - description: orderData
+        in: body
+        name: orderData
+        required: true
+        schema:
+          $ref: '#/definitions/model.AddOrderType'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: 주문을 진행합니다.
+  /buyer/order/{order_id}:
+    get:
+      consumes:
+      - application/json
+      description: 현재 주문의 진행상황을 확인하기 위한 함수
+      parameters:
+      - description: orderId
+        in: path
+        name: order_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: 현재 주문의 진행상황을 확인합니다.
+  /buyer/order/add:
+    patch:
+      consumes:
+      - application/json
+      description: 주문에 메뉴를 추가하는 함수 -> "배달중", "배달완료" 상태일 시에는 에러 반환
+      parameters:
+      - description: addData
+        in: body
+        name: addData
+        required: true
+        schema:
+          $ref: '#/definitions/model.AddMenusType'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: 주문에 메뉴를 추가합니다.
+  /buyer/order/change:
+    patch:
+      consumes:
+      - application/json
+      description: 주문서 메뉴를 변경하는 함수 -> "배달중", "배달완료" 상태일 시에는 에러 반환
+      parameters:
+      - description: changeData
+        in: body
+        name: changeData
+        required: true
+        schema:
+          $ref: '#/definitions/model.ChangeMenuType'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: 주문에서 메뉴를 변경합니다.
+  /buyer/review/{menu_id}:
+    get:
+      consumes:
+      - application/json
+      description: 메뉴별로 리뷰와 평점을 가져오기 위한 함수
+      parameters:
+      - description: menuid
+        in: path
+        name: menu_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: 메뉴별 리뷰와 평점을 가져옵니다.
+    post:
+      consumes:
+      - application/json
+      description: 메뉴별로 리뷰와 평점 작성하기 위한 함수
+      parameters:
+      - description: menuid
+        in: path
+        name: menu_id
+        required: true
+        type: string
+      - description: review
+        in: body
+        name: review
+        required: true
+        schema:
+          $ref: '#/definitions/model.Review'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: 메뉴별 리뷰와 평점을 작성합니다.
+  /seller/delete:
+    post:
+      consumes:
+      - application/json
+      description: 메뉴를 삭제하기 위한 함수
+      parameters:
+      - description: menuId
+        in: body
+        name: menuId
+        required: true
+        schema:
+          $ref: '#/definitions/model.IdType'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: DB에서 메뉴를 삭제합니다.
+  /seller/menu:
+    post:
+      consumes:
+      - application/json
+      description: 새 메뉴를 추가하기 위한 함수
+      parameters:
+      - description: menu
+        in: body
+        name: menu
+        required: true
+        schema:
+          $ref: '#/definitions/model.AddMenuDataType'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: DB에 새 메뉴를 추가합니다.
+  /seller/order:
+    get:
+      consumes:
+      - application/json
+      description: 주문 내역을 가져오기 위한 함수
+      parameters:
+      - description: page
+        in: query
+        name: page
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Menu'
+            type: array
+      summary: 주문 전체 내역을 page에 맞춰서 가져옵니다. 각 페이지당 5개의 data를 포함합니다.
+    patch:
+      consumes:
+      - application/json
+      description: 주문의 상태를 업데이트 하기 위한 함수
+      parameters:
+      - description: id
+        in: body
+        name: id
+        required: true
+        schema:
+          $ref: '#/definitions/model.IdType'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: 현재 주문의 상태를 업데이트 합니다. 상태는 "주문접수 -> 조리중 -> 배달중 -> 배달완료" 의 순서로 진행되고, 상태가
+        배달중 이상인 경우 메뉴 변경 및 추가 등의 작업이 제한됩니다.
+  /seller/patch:
+    post:
+      consumes:
+      - application/json
+      description: 메뉴를 수정하기 위한 함수
+      parameters:
+      - description: update data
+        in: body
+        name: updateData
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateMenuDataType'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: '메뉴 정보를 업데이트 합니다. ex) 가격 : 10000 -> 가격 : 9000'
+  /seller/suggestion:
+    post:
+      consumes:
+      - application/json
+      description: 추천 메뉴를 업데이트 하기 위한 함수
+      parameters:
+      - description: suggest data
+        in: body
+        name: suggestionIds
+        required: true
+        schema:
+          $ref: '#/definitions/model.SuggestionType'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: 추천 메뉴를 업데이트 합니다. ex) 햄버거, 삼겹살 -> 스테이크, 컵밥
 swagger: "2.0"

@@ -15,7 +15,680 @@ const docTemplate = `{
     },
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
-    "paths": {}
+    "paths": {
+        "/buyer/menu": {
+            "get": {
+                "description": "모든 메뉴 리스트를 가져오기 위한 함수",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "모든 메뉴를 가져옵니다. 페이지당 5개의 데이터를 가지고 있습니다.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "page",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/buyer/menu/{category}": {
+            "get": {
+                "description": "카테고리별 메뉴 리스트를 정렬하여 가져오기 위한 함수",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "조건에 맞는 메뉴들을 정렬하여 가져옵니다. 각 카테고리는 추천(suggestion), 평점(avg), 주문 수(orderedcount)로 이루어져 있으며, 페이지별 5개의 data를 반환합니다.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "category",
+                        "name": "category",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "page",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/buyer/order": {
+            "post": {
+                "description": "주문을 하는 함수",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "주문을 진행합니다.",
+                "parameters": [
+                    {
+                        "description": "orderData",
+                        "name": "orderData",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.AddOrderType"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/buyer/order/add": {
+            "patch": {
+                "description": "주문에 메뉴를 추가하는 함수 -\u003e \"배달중\", \"배달완료\" 상태일 시에는 에러 반환",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "주문에 메뉴를 추가합니다.",
+                "parameters": [
+                    {
+                        "description": "addData",
+                        "name": "addData",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.AddMenusType"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/buyer/order/change": {
+            "patch": {
+                "description": "주문서 메뉴를 변경하는 함수 -\u003e \"배달중\", \"배달완료\" 상태일 시에는 에러 반환",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "주문에서 메뉴를 변경합니다.",
+                "parameters": [
+                    {
+                        "description": "changeData",
+                        "name": "changeData",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.ChangeMenuType"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/buyer/order/{order_id}": {
+            "get": {
+                "description": "현재 주문의 진행상황을 확인하기 위한 함수",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "현재 주문의 진행상황을 확인합니다.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "orderId",
+                        "name": "order_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/buyer/review/{menu_id}": {
+            "get": {
+                "description": "메뉴별로 리뷰와 평점을 가져오기 위한 함수",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "메뉴별 리뷰와 평점을 가져옵니다.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "menuid",
+                        "name": "menu_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "메뉴별로 리뷰와 평점 작성하기 위한 함수",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "메뉴별 리뷰와 평점을 작성합니다.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "menuid",
+                        "name": "menu_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "review",
+                        "name": "review",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Review"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/seller/delete": {
+            "post": {
+                "description": "메뉴를 삭제하기 위한 함수",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "DB에서 메뉴를 삭제합니다.",
+                "parameters": [
+                    {
+                        "description": "menuId",
+                        "name": "menuId",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.IdType"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/seller/menu": {
+            "post": {
+                "description": "새 메뉴를 추가하기 위한 함수",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "DB에 새 메뉴를 추가합니다.",
+                "parameters": [
+                    {
+                        "description": "menu",
+                        "name": "menu",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.AddMenuDataType"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/seller/order": {
+            "get": {
+                "description": "주문 내역을 가져오기 위한 함수",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "주문 전체 내역을 page에 맞춰서 가져옵니다. 각 페이지당 5개의 data를 포함합니다.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "page",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Menu"
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "주문의 상태를 업데이트 하기 위한 함수",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "현재 주문의 상태를 업데이트 합니다. 상태는 \"주문접수 -\u003e 조리중 -\u003e 배달중 -\u003e 배달완료\" 의 순서로 진행되고, 상태가 배달중 이상인 경우 메뉴 변경 및 추가 등의 작업이 제한됩니다.",
+                "parameters": [
+                    {
+                        "description": "id",
+                        "name": "id",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.IdType"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/seller/patch": {
+            "post": {
+                "description": "메뉴를 수정하기 위한 함수",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "메뉴 정보를 업데이트 합니다. ex) 가격 : 10000 -\u003e 가격 : 9000",
+                "parameters": [
+                    {
+                        "description": "update data",
+                        "name": "updateData",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UpdateMenuDataType"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/seller/suggestion": {
+            "post": {
+                "description": "추천 메뉴를 업데이트 하기 위한 함수",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "추천 메뉴를 업데이트 합니다. ex) 햄버거, 삼겹살 -\u003e 스테이크, 컵밥",
+                "parameters": [
+                    {
+                        "description": "suggest data",
+                        "name": "suggestionIds",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.SuggestionType"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "model.AddMenuDataType": {
+            "type": "object",
+            "properties": {
+                "avg": {
+                    "type": "integer"
+                },
+                "from": {
+                    "type": "string"
+                },
+                "limit": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "orderable": {
+                    "type": "boolean"
+                },
+                "orderedcount": {
+                    "type": "integer"
+                },
+                "price": {
+                    "type": "integer"
+                },
+                "suggestion": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "model.AddMenusType": {
+            "type": "object",
+            "properties": {
+                "newItem": {
+                    "type": "string"
+                },
+                "neworder": {
+                    "$ref": "#/definitions/model.AddOrderType"
+                },
+                "orderId": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.AddOrderType": {
+            "type": "object",
+            "properties": {
+                "buyerinfo": {
+                    "$ref": "#/definitions/model.BuyerInfo"
+                },
+                "isReviewed": {
+                    "type": "boolean"
+                },
+                "orderedmenus": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.BuyerInfo": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "pnum": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.ChangeMenuType": {
+            "type": "object",
+            "properties": {
+                "legacyfoodid": {
+                    "type": "string"
+                },
+                "newfoodid": {
+                    "type": "string"
+                },
+                "orderid": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.IdType": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.Menu": {
+            "type": "object",
+            "properties": {
+                "avg": {
+                    "type": "number"
+                },
+                "from": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "limit": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "orderable": {
+                    "type": "boolean"
+                },
+                "orderedcount": {
+                    "type": "integer"
+                },
+                "price": {
+                    "type": "integer"
+                },
+                "reviews": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Review"
+                    }
+                },
+                "suggestion": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "model.Review": {
+            "type": "object",
+            "properties": {
+                "orderId": {
+                    "type": "string"
+                },
+                "review": {
+                    "type": "string"
+                },
+                "score": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.SuggestionType": {
+            "type": "object",
+            "properties": {
+                "ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "model.UpdateMenuDataType": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "key": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        }
+    }
 }`
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
