@@ -4,6 +4,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/codestates/WBABEProject-08/commits/main/controller"
 	logger "github.com/codestates/WBABEProject-08/commits/main/log"
+	"github.com/codestates/WBABEProject-08/commits/main/docs"
+	ginSwg "github.com/swaggo/gin-swagger"
+	swgFiles "github.com/swaggo/files"
 )
 
 type Router struct {
@@ -42,6 +45,9 @@ func (p *Router) Idx() *gin.Engine {
 	r.Use(logger.GinLogger())
 	r.Use(logger.GinRecovery(true))
 	r.Use(CORS())
+
+	r.GET("/swagger/:any", ginSwg.WrapHandler(swgFiles.Handler))
+	docs.SwaggerInfo.Host = "localhost:8080"
 
 	sGroup := r.Group("/seller")
 	{
