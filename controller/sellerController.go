@@ -24,6 +24,7 @@ func GetSellerController(Om *model.OrderedListModel, Mm *model.MenuModel) *Selle
 // 주문내역 리스트 조회하는 함수
 // GetOrderList godoc
 // @Summary 주문 전체 내역을 page에 맞춰서 가져옵니다. 각 페이지당 5개의 data를 포함합니다.
+// @Tags Seller
 // @Description 주문 내역을 가져오기 위한 함수
 // @name GetOrderList
 // @Accept  json
@@ -44,6 +45,7 @@ func (sc *SellerController) GetOrderList(c *gin.Context) {
 // 주문 요청에 대한 상태 업데이트 함수
 // UpdateOrderStatus godoc
 // @Summary 현재 주문의 상태를 업데이트 합니다. 상태는 "주문접수 -> 조리중 -> 배달중 -> 배달완료" 의 순서로 진행되고, 상태가 배달중 이상인 경우 메뉴 변경 및 추가 등의 작업이 제한됩니다.
+// @Tags Seller
 // @Description 주문의 상태를 업데이트 하기 위한 함수
 // @name UpdateOrderStatus
 // @Accept  json
@@ -66,6 +68,7 @@ func (sc *SellerController) UpdateOrderStatus(c *gin.Context) {
 // 새 메뉴를 추가하는 함수
 // AddMenu godoc
 // @Summary DB에 새 메뉴를 추가합니다.
+// @Tags Seller
 // @Description 새 메뉴를 추가하기 위한 함수
 // @name AddMenu
 // @Accept  json
@@ -91,6 +94,7 @@ func (sc *SellerController) AddMenu(c *gin.Context) {
 // 메뉴를 삭제하는 함수
 // DeleteMenu godoc
 // @Summary DB에서 메뉴를 삭제합니다.
+// @Tags Seller
 // @Description 메뉴를 삭제하기 위한 함수
 // @name DeleteMenu
 // @Accept  json
@@ -118,6 +122,7 @@ func (sc *SellerController) DeleteMenu(c *gin.Context) {
 // 메뉴 정보를 수정하는 함수
 // UpdateMenu godoc
 // @Summary 메뉴 정보를 업데이트 합니다. ex) 가격 : 10000 -> 가격 : 9000
+// @Tags Seller
 // @Description 메뉴를 수정하기 위한 함수
 // @name UpdateMenu
 // @Accept  json
@@ -146,6 +151,7 @@ func (sc *SellerController) UpdateMenu(c *gin.Context) {
 // 추천메뉴를 변경하는 함수
 // SuggestMenu godoc
 // @Summary 추천 메뉴를 업데이트 합니다. ex) 햄버거, 삼겹살 -> 스테이크, 컵밥
+// @Tags Seller
 // @Description 추천 메뉴를 업데이트 하기 위한 함수
 // @name SuggestMenu
 // @Accept  json

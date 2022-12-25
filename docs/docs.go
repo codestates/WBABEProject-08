@@ -25,6 +25,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "Buyer"
+                ],
                 "summary": "모든 메뉴를 가져옵니다. 페이지당 5개의 데이터를 가지고 있습니다.",
                 "parameters": [
                     {
@@ -53,6 +56,9 @@ const docTemplate = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "Buyer"
                 ],
                 "summary": "조건에 맞는 메뉴들을 정렬하여 가져옵니다. 각 카테고리는 추천(suggestion), 평점(avg), 주문 수(orderedcount)로 이루어져 있으며, 페이지별 5개의 data를 반환합니다.",
                 "parameters": [
@@ -89,6 +95,9 @@ const docTemplate = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "Buyer"
                 ],
                 "summary": "주문을 진행합니다.",
                 "parameters": [
@@ -133,6 +142,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "Buyer"
+                ],
                 "summary": "주문에 메뉴를 추가합니다.",
                 "parameters": [
                     {
@@ -164,6 +176,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "Buyer"
+                ],
                 "summary": "주문에서 메뉴를 변경합니다.",
                 "parameters": [
                     {
@@ -182,6 +197,12 @@ const docTemplate = `{
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 }
             }
@@ -194,6 +215,9 @@ const docTemplate = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "Buyer"
                 ],
                 "summary": "현재 주문의 진행상황을 확인합니다.",
                 "parameters": [
@@ -229,6 +253,9 @@ const docTemplate = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "Buyer"
                 ],
                 "summary": "메뉴별 리뷰와 평점을 가져옵니다.",
                 "parameters": [
@@ -268,6 +295,9 @@ const docTemplate = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "Buyer"
                 ],
                 "summary": "메뉴별 리뷰와 평점을 작성합니다.",
                 "parameters": [
@@ -313,6 +343,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "Seller"
+                ],
                 "summary": "DB에서 메뉴를 삭제합니다.",
                 "parameters": [
                     {
@@ -349,6 +382,9 @@ const docTemplate = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "Seller"
                 ],
                 "summary": "DB에 새 메뉴를 추가합니다.",
                 "parameters": [
@@ -387,6 +423,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "Seller"
+                ],
                 "summary": "주문 전체 내역을 page에 맞춰서 가져옵니다. 각 페이지당 5개의 data를 포함합니다.",
                 "parameters": [
                     {
@@ -416,6 +455,9 @@ const docTemplate = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "Seller"
                 ],
                 "summary": "현재 주문의 상태를 업데이트 합니다. 상태는 \"주문접수 -\u003e 조리중 -\u003e 배달중 -\u003e 배달완료\" 의 순서로 진행되고, 상태가 배달중 이상인 경우 메뉴 변경 및 추가 등의 작업이 제한됩니다.",
                 "parameters": [
@@ -447,6 +489,9 @@ const docTemplate = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "Seller"
                 ],
                 "summary": "메뉴 정보를 업데이트 합니다. ex) 가격 : 10000 -\u003e 가격 : 9000",
                 "parameters": [
@@ -484,6 +529,9 @@ const docTemplate = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "Seller"
                 ],
                 "summary": "추천 메뉴를 업데이트 합니다. ex) 햄버거, 삼겹살 -\u003e 스테이크, 컵밥",
                 "parameters": [

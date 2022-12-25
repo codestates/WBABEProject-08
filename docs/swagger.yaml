@@ -133,6 +133,8 @@ paths:
           schema:
             type: string
       summary: 모든 메뉴를 가져옵니다. 페이지당 5개의 데이터를 가지고 있습니다.
+      tags:
+      - Buyer
   /buyer/menu/{category}:
     get:
       consumes:
@@ -158,6 +160,8 @@ paths:
             type: string
       summary: 조건에 맞는 메뉴들을 정렬하여 가져옵니다. 각 카테고리는 추천(suggestion), 평점(avg), 주문 수(orderedcount)로
         이루어져 있으며, 페이지별 5개의 data를 반환합니다.
+      tags:
+      - Buyer
   /buyer/order:
     post:
       consumes:
@@ -186,6 +190,8 @@ paths:
           schema:
             type: string
       summary: 주문을 진행합니다.
+      tags:
+      - Buyer
   /buyer/order/{order_id}:
     get:
       consumes:
@@ -209,6 +215,8 @@ paths:
           schema:
             type: string
       summary: 현재 주문의 진행상황을 확인합니다.
+      tags:
+      - Buyer
   /buyer/order/add:
     patch:
       consumes:
@@ -229,6 +237,8 @@ paths:
           schema:
             type: string
       summary: 주문에 메뉴를 추가합니다.
+      tags:
+      - Buyer
   /buyer/order/change:
     patch:
       consumes:
@@ -248,7 +258,13 @@ paths:
           description: OK
           schema:
             type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
       summary: 주문에서 메뉴를 변경합니다.
+      tags:
+      - Buyer
   /buyer/review/{menu_id}:
     get:
       consumes:
@@ -276,6 +292,8 @@ paths:
           schema:
             type: string
       summary: 메뉴별 리뷰와 평점을 가져옵니다.
+      tags:
+      - Buyer
     post:
       consumes:
       - application/json
@@ -304,6 +322,8 @@ paths:
           schema:
             type: string
       summary: 메뉴별 리뷰와 평점을 작성합니다.
+      tags:
+      - Buyer
   /seller/delete:
     post:
       consumes:
@@ -328,6 +348,8 @@ paths:
           schema:
             type: string
       summary: DB에서 메뉴를 삭제합니다.
+      tags:
+      - Seller
   /seller/menu:
     post:
       consumes:
@@ -352,6 +374,8 @@ paths:
           schema:
             type: string
       summary: DB에 새 메뉴를 추가합니다.
+      tags:
+      - Seller
   /seller/order:
     get:
       consumes:
@@ -373,6 +397,8 @@ paths:
               $ref: '#/definitions/model.Menu'
             type: array
       summary: 주문 전체 내역을 page에 맞춰서 가져옵니다. 각 페이지당 5개의 data를 포함합니다.
+      tags:
+      - Seller
     patch:
       consumes:
       - application/json
@@ -393,6 +419,8 @@ paths:
             type: string
       summary: 현재 주문의 상태를 업데이트 합니다. 상태는 "주문접수 -> 조리중 -> 배달중 -> 배달완료" 의 순서로 진행되고, 상태가
         배달중 이상인 경우 메뉴 변경 및 추가 등의 작업이 제한됩니다.
+      tags:
+      - Seller
   /seller/patch:
     post:
       consumes:
@@ -417,6 +445,8 @@ paths:
           schema:
             type: string
       summary: '메뉴 정보를 업데이트 합니다. ex) 가격 : 10000 -> 가격 : 9000'
+      tags:
+      - Seller
   /seller/suggestion:
     post:
       consumes:
@@ -441,4 +471,6 @@ paths:
           schema:
             type: string
       summary: 추천 메뉴를 업데이트 합니다. ex) 햄버거, 삼겹살 -> 스테이크, 컵밥
+      tags:
+      - Seller
 swagger: "2.0"
