@@ -36,5 +36,5 @@ swagger 파일을 만들어준다
 http://localhost:8080/swagger/index.html#/ 페이지로 접속하면 swagger를 통해 실행할 수 있다.
 
 ### 코드 구성
-코드 구성에 대한 정보는 아래 페이지에서 확인할 수 있다.
+코드 구성에 대한 정보는 우측 페이지에서 확인할 수 있다.
 https://quilt-stoplight-9b6.notion.site/Docs-0c6140c809904bdcb46a41fbbea48369
