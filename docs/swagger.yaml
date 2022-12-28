@@ -351,6 +351,31 @@ paths:
       tags:
       - Seller
   /seller/menu:
+    patch:
+      consumes:
+      - application/json
+      description: 메뉴를 수정하기 위한 함수
+      parameters:
+      - description: update data
+        in: body
+        name: updateData
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateMenuDataType'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: '메뉴 정보를 업데이트 합니다. ex) 가격 : 10000 -> 가격 : 9000'
+      tags:
+      - Seller
     post:
       consumes:
       - application/json
@@ -419,32 +444,6 @@ paths:
             type: string
       summary: 현재 주문의 상태를 업데이트 합니다. 상태는 "주문접수 -> 조리중 -> 배달중 -> 배달완료" 의 순서로 진행되고, 상태가
         배달중 이상인 경우 메뉴 변경 및 추가 등의 작업이 제한됩니다.
-      tags:
-      - Seller
-  /seller/patch:
-    post:
-      consumes:
-      - application/json
-      description: 메뉴를 수정하기 위한 함수
-      parameters:
-      - description: update data
-        in: body
-        name: updateData
-        required: true
-        schema:
-          $ref: '#/definitions/model.UpdateMenuDataType'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-        "404":
-          description: Not Found
-          schema:
-            type: string
-      summary: '메뉴 정보를 업데이트 합니다. ex) 가격 : 10000 -> 가격 : 9000'
       tags:
       - Seller
   /seller/suggestion:

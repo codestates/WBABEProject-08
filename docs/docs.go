@@ -412,6 +412,44 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "patch": {
+                "description": "메뉴를 수정하기 위한 함수",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Seller"
+                ],
+                "summary": "메뉴 정보를 업데이트 합니다. ex) 가격 : 10000 -\u003e 가격 : 9000",
+                "parameters": [
+                    {
+                        "description": "update data",
+                        "name": "updateData",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UpdateMenuDataType"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
             }
         },
         "/seller/order": {
@@ -474,46 +512,6 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/seller/patch": {
-            "post": {
-                "description": "메뉴를 수정하기 위한 함수",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Seller"
-                ],
-                "summary": "메뉴 정보를 업데이트 합니다. ex) 가격 : 10000 -\u003e 가격 : 9000",
-                "parameters": [
-                    {
-                        "description": "update data",
-                        "name": "updateData",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.UpdateMenuDataType"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
                         "schema": {
                             "type": "string"
                         }
