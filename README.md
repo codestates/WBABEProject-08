@@ -32,8 +32,9 @@ swagger 파일을 만들어준다
 ### 프로그램 실행방법
 제공하는 기능의 api 리스트는 아래와 같다.
 <img width="1167" alt="스크린샷 2022-12-25 23 42 41" src="https://user-images.githubusercontent.com/100397903/209472370-88fcbb61-aa57-4a87-acf4-131b40265b5f.png">
-실행 테스트를 위해선 run go main.go 를 통해 프로그램을 실행한 뒤
-http://localhost:8080/swagger/index.html#/ 페이지로 접속하면 swagger를 통해 실행할 수 있다.
+테스트를 위해선 프로그램 실행 후 http://localhost:8080/swagger/index.html#/ 페이지로 접속하면 swagger를 통해 실행할 수 있다.
+
+
 
 ### 코드 구성
 코드 구성에 대한 정보는 우측 페이지에서 확인할 수 있다.
