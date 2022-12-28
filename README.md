@@ -28,17 +28,18 @@ swagger 파일을 만들어준다
   ```shell
   go run main.go
   ```
-#
+
 * 일별 주문번호의 정상적인 count를 위해선 orderedlist 컬렉션에 아래와 같이 {daycount : 0} 의 데이터를 먼저 넣어주어야 한다.
 <img width="233" alt="스크린샷 2022-12-28 13 28 09" src="https://user-images.githubusercontent.com/100397903/209757411-95b2d6be-b243-43b6-9817-aa1241f958f1.png">
 <img width="992" alt="스크린샷 2022-12-28 13 26 10" src="https://user-images.githubusercontent.com/100397903/209757348-eee6a96a-af9c-4291-98d2-aa07c86fbb8b.png">
-#
-  
+
 ### 프로그램 실행방법
 제공하는 기능의 api 리스트는 아래와 같다.
 <img width="1167" alt="스크린샷 2022-12-25 23 42 41" src="https://user-images.githubusercontent.com/100397903/209472370-88fcbb61-aa57-4a87-acf4-131b40265b5f.png">
 테스트를 위해선 프로그램 실행 후 http://localhost:8080/swagger/index.html#/ 페이지로 접속하면 swagger를 통해 실행할 수 있다.
 
+  - seller - 메뉴 신규 등록
+  <img width="721" alt="스크린샷 2022-12-28 13 40 55" src="https://user-images.githubusercontent.com/100397903/209758419-ab05e02f-63be-4c1c-8982-d1efdcee6dc9.png">
 
 
 ### 코드 구성
