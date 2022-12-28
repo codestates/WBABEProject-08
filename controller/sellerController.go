@@ -162,6 +162,7 @@ func (sc *SellerController) UpdateMenu(c *gin.Context) {
 // @failure 404 {object} string
 func (sc *SellerController) SuggestMenu(c *gin.Context) {
 	var suggestion model.SuggestionType
+	// ShouldBindJSON에 대한 Return value를 체크해주세요.
 	c.ShouldBindJSON(&suggestion)
 
 	err := sc.MenuModel.SuggestionUpdate(&suggestion)

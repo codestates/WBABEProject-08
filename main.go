@@ -20,6 +20,7 @@ func errPanic(err error) {
 func main() {
 	var err error
 	
+	//다른 환경에서도 실행될 수 있도록 configuration path를 변경해주세요
 	config := conf.GetConfig("/Users/sunghyun/Desktop/projects/wemade_project/config/config.toml")
 	
 		if err := logger.InitLogger(config); err != nil {
@@ -32,6 +33,8 @@ func main() {
 	port := config.Server.Port
 	host := config.Server.Host
 	dbName := config.Server.DBname
+	// Model0과 Model1보다 조금 더 구체적인 모델명을 사용할 수 있을까요?
+	// Model0, Model1은 local에서만 사용되기 때문에 lowercase로 작성되면 좋겠습니다.
 	Model0 := config.DB["menu"]["model"]
 	Model1 := config.DB["orderedlist"]["model"]
 

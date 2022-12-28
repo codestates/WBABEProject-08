@@ -24,6 +24,7 @@ type Review struct {
 	OrderId primitive.ObjectID `bson:"orderid"`
 }
 
+// Bool type의 변수에 대해 이름만 보고 Bool type임을 알 수 있게 수정할 수 있을까요?
 type Menu struct {
 	ID primitive.ObjectID `bson:"_id,omitempty"`
 	Name string `bson:"name" json:"name"`
@@ -54,13 +55,16 @@ func GetMenuModel(db, host, model string) (*MenuModel, error) {
 
 // DB에 메뉴 data를 추가하는 메서드
 func (m *MenuModel) Add(data []byte) (primitive.ObjectID, error) {
+	// 표준 출력 보다는 logger를 사용하는 것이 어떨까요?
 	fmt.Println("string: ", string(data))
 	newMenu := &Menu{}
+	// Unmarshal의 결과를 체크하는 코드를 넣어주세요.
 	json.Unmarshal(data, newMenu)
 
 	fmt.Println("Unmarshar: ", newMenu)
 
 	result, err := m.Menucollection.InsertOne(context.TODO(), newMenu)
+	// 아래의 코드를 더 깔끔하게 작성할 수 있을 것 같습니다. 
 	if err != nil {
 		return result.InsertedID.(primitive.ObjectID), err
 	} else {
@@ -104,10 +108,12 @@ func (m *MenuModel) GetList(category string, page int64) []Menu {
 	menus := []Menu{}
 	filter := bson.D{}
 
+	// 아래에서 중복되는 코드는 하나로 사용할 수 있을까요?
 	if category == "suggestion" {
 		filter = bson.D{{Key: "suggestion", Value: true}}
 		cursor, err := m.Menucollection.Find(context.TODO(), filter)
 		util.PanicHandler(err)
+		// cursor.All에 대한 결과값을 체크해주세요.
 		cursor.All(context.TODO(), &menus)
 		util.PanicHandler(err)
 	} else {
