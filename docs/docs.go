@@ -520,7 +520,7 @@ const docTemplate = `{
             }
         },
         "/seller/suggestion": {
-            "post": {
+            "patch": {
                 "description": "추천 메뉴를 업데이트 하기 위한 함수",
                 "consumes": [
                     "application/json"

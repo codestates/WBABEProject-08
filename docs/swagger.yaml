@@ -447,7 +447,7 @@ paths:
       tags:
       - Seller
   /seller/suggestion:
-    post:
+    patch:
       consumes:
       - application/json
       description: 추천 메뉴를 업데이트 하기 위한 함수

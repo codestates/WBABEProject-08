@@ -157,7 +157,7 @@ func (sc *SellerController) UpdateMenu(c *gin.Context) {
 // @Accept  json
 // @Produce  json
 // @Param suggestionIds body model.SuggestionType true "suggest data"
-// @Router /seller/suggestion [post]
+// @Router /seller/suggestion [patch]
 // @Success 200 {object} string
 // @failure 404 {object} string
 func (sc *SellerController) SuggestMenu(c *gin.Context) {
