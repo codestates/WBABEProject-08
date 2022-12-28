@@ -128,7 +128,7 @@ func (sc *SellerController) DeleteMenu(c *gin.Context) {
 // @Accept  json
 // @Produce  json
 // @Param updateData body model.UpdateMenuDataType true "update data"
-// @Router /seller/patch [post]
+// @Router /seller/menu [patch]
 // @Success 200 {object} string
 // @failure 404 {object} string
 func (sc *SellerController) UpdateMenu(c *gin.Context) {
