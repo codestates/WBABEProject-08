@@ -28,7 +28,7 @@ type OrderedList struct {
 	IsReviewed bool `bson:"isreviewed" json:"isreviewed"`
 	Status string `bson:"status" json:"status"`
 	BuyerInfo BuyerInfo `bson:"buyerinfo" json:"buyerinfo"`
-	Orderedmenus []primitive.ObjectID `bson:"orderedmenus"`
+	OrderedmenuIDs []primitive.ObjectID `bson:"orderedmenus"`
 }
 
 type DayCounter struct {
@@ -128,9 +128,9 @@ func (o *OrderedListModel) Add(list *OrderedList) primitive.ObjectID {
 func (o *OrderedListModel) ChangeOrder(order *OrderedList, change *ChangeMenuType) error {
 	isChanged := false
 	// 먼저 변경하고싶은 메뉴가 orderlist에 있는지 확인한다.
-	for idx, value := range order.Orderedmenus {
+	for idx, value := range order.OrderedmenuIDs {
 		if value == change.LegacyFoodId {
-			order.Orderedmenus[idx] = change.NewFoodId
+			order.OrderedmenuIDs[idx] = change.NewFoodId
 			isChanged = true
 		}
 	}
@@ -138,7 +138,7 @@ func (o *OrderedListModel) ChangeOrder(order *OrderedList, change *ChangeMenuTyp
 		return errors.New("주문 내역에 해당 메뉴가 존재하지 않습니다")
 	}
 	filter := bson.D{{Key: "_id", Value: change.OrderId}}
-	update := bson.D{{Key: "$set", Value: bson.D{{Key: "orderedmenus", Value: order.Orderedmenus}}}}
+	update := bson.D{{Key: "$set", Value: bson.D{{Key: "orderedmenus", Value: order.OrderedmenuIDs}}}}
 	_, err := o.Collection.UpdateOne(context.TODO(), filter, update)
 	util.ErrorHandler(err)
 
@@ -150,8 +150,8 @@ func (o *OrderedListModel) ChangeOrder(order *OrderedList, change *ChangeMenuTyp
 func (o *OrderedListModel) AddOrder(addStruct *AddMenuType, legacyOrder *OrderedList) primitive.ObjectID {
 	// 추가하고자 하는 음식의 아이디를 이전 주문의 음식 배열에 넣어주는 로직
 	filter := bson.D{{Key: "_id", Value: addStruct.OrderId}}
-	legacyOrder.Orderedmenus = append(legacyOrder.Orderedmenus, addStruct.NewItem)
-	update := bson.D{{Key: "$set", Value: bson.D{{Key: "orderedmenus", Value: legacyOrder.Orderedmenus}}}}
+	legacyOrder.OrderedmenuIDs = append(legacyOrder.OrderedmenuIDs, addStruct.NewItem)
+	update := bson.D{{Key: "$set", Value: bson.D{{Key: "orderedmenus", Value: legacyOrder.OrderedmenuIDs}}}}
 	_, err := o.Collection.UpdateOne(context.TODO(), filter, update)
 	util.ErrorHandler(err)
 
