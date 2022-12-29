@@ -1,13 +1,11 @@
 package model
 
 import (
-	"github.com/codestates/WBABEProject-08/commits/main/log"
 	"go.mongodb.org/mongo-driver/bson"
 	"fmt"
 	"github.com/codestates/WBABEProject-08/commits/main/util"
 	"encoding/json"
 	"context"
-	"log"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -54,12 +52,10 @@ func GetMenuModel(db, host, model string) (*MenuModel, error) {
 
 // DB에 메뉴 data를 추가하는 메서드
 func (m *MenuModel) AddMenu(data []byte) (primitive.ObjectID, error) {
-	// 표준 출력 보다는 logger를 사용하는 것이 어떨까요?
-	log.Println("string: ", string(data))
 	newMenu := &Menu{}
 	err := json.Unmarshal(data, newMenu)
 	
-	logger.Error(err)
+	util.ErrorHandler(err)
 
 	result, err := m.Menucollection.InsertOne(context.TODO(), newMenu)
 	
@@ -102,21 +98,15 @@ func (m *MenuModel) GetMenuList(category string, page int64) []Menu {
 	menus := []Menu{}
 	filter := bson.D{}
 
-	// 아래에서 중복되는 코드는 하나로 사용할 수 있을까요?
 	if category == "suggestion" {
 		filter = bson.D{{Key: "suggestion", Value: true}}
-		cursor, err := m.Menucollection.Find(context.TODO(), filter)
-		util.ErrorHandler(err)
-		// cursor.All에 대한 결과값을 체크해주세요.
-		cursor.All(context.TODO(), &menus)
-		util.ErrorHandler(err)
-	} else {
-		opt := options.Find().SetSort(bson.D{{Key: category, Value: -1}}).SetLimit(5).SetSkip((page - 1) * 5)
-		cursor, err := m.Menucollection.Find(context.TODO(), filter, opt)
-		util.ErrorHandler(err)
-		err = cursor.All(context.TODO(), &menus)
-		util.ErrorHandler(err)
 	}
+	opt := options.Find().SetSort(bson.D{{Key: category, Value: -1}}).SetLimit(5).SetSkip((page - 1) * 5)
+	cursor, err := m.Menucollection.Find(context.TODO(), filter, opt)
+	util.ErrorHandler(err)
+
+	err = cursor.All(context.TODO(), &menus)
+	util.ErrorHandler(err)
 
 	return menus
 }
