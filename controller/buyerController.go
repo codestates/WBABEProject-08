@@ -119,7 +119,6 @@ func (bc *BuyerController) AddReview(c *gin.Context) {
 	if err != nil {
 		util.PanicHandler(err)
 	}
-	// fmt.Println(review)
 	// 먼저 해당 주문에 대한 리뷰가 있는지 확인하고 있다면 멈춘다.
 	orderId := review.OrderId
 	order := bc.OrderedListModel.GetOne(orderId)
@@ -172,7 +171,7 @@ func (bc *BuyerController) Order(c *gin.Context) {
 		// 있다면 limit -1, count +1
 		bc.MenuModel.LimitAndCountUpdate(menu.ID, menu.Limit, menu.Orderedcount)
 		// 그리고 DayOrderCount 1 추가
-		dayCount := bc.OrderedListModel.DayOrderCount(daycountId)
+		dayCount := bc.OrderedListModel.DayOrderCount(daycountID)
 		// 주문 추가
 		orderNum := bc.OrderedListModel.Add(list)
 
