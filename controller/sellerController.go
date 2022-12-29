@@ -36,7 +36,7 @@ func (sc *SellerController) GetOrderList(c *gin.Context) {
 	sPage := c.Query("page")
 	iPage, _ := strconv.Atoi(sPage)
 	// 전체 주문내역 리스트를 가져온다.
-	result := sc.OrderedListModel.GetAll(daycountId, int64(iPage))
+	result := sc.OrderedListModel.GetAll(daycountID, int64(iPage))
 
 	c.JSON(200, gin.H{"주문 목록" : result})
 }

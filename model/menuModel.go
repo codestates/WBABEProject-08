@@ -24,11 +24,10 @@ type Review struct {
 	OrderId primitive.ObjectID `bson:"orderid"`
 }
 
-// Bool type의 변수에 대해 이름만 보고 Bool type임을 알 수 있게 수정할 수 있을까요?
 type Menu struct {
 	ID primitive.ObjectID `bson:"_id,omitempty"`
 	Name string `bson:"name" json:"name"`
-	Orderable bool `bson:"orderable" json:"orderable"`
+	IsOrderable bool `bson:"orderable" json:"orderable"`
 	Limit int `bson:"limit" json:"limit"`
 	Price int `bson:"price" json:"price"`
 	From string `bson:"from" json:"from"`
