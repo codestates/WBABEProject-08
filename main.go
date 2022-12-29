@@ -20,8 +20,7 @@ func errPanic(err error) {
 func main() {
 	var err error
 	
-	//다른 환경에서도 실행될 수 있도록 configuration path를 변경해주세요
-	config := conf.GetConfig("/Users/sunghyun/Desktop/projects/wemade_project/config/config.toml")
+	config := conf.GetConfig("config/config.toml")
 	
 		if err := logger.InitLogger(config); err != nil {
 			fmt.Printf("init logger failed, err:%v\n", err)
