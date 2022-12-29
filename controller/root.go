@@ -2,8 +2,6 @@ package controller
 
 import (
 	"github.com/codestates/WBABEProject-08/commits/main/model"
-	// 사용하지 않는 코드는 삭제하는 것이 좋습니다.
-	// "github.com/codestates/WBABEProject-08/commits/main/util"
 )
 
 type Controller struct {
