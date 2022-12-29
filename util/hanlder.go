@@ -1,5 +1,5 @@
 package util
-
+// 파일명 오타 수정이 필요합니다. hanlder -> handler
 import (
 	"encoding/json"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -13,6 +13,7 @@ func PanicHandler (err error) {
 
 func GetJsonIdKeyValue(data []byte) (primitive.ObjectID, string, interface{}) {
 	var unMarshared map[string]interface{}
+	// retrun value를 체크하는 것이 좋을 것 같습니다. 
 	json.Unmarshal(data, &unMarshared)
 
 	var id primitive.ObjectID
