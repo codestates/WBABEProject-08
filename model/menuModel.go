@@ -52,7 +52,7 @@ func GetMenuModel(db, host, model string) (*MenuModel, error) {
 	return m, nil
 }
 
-
+// 주석을 사용하기보다는 메서드 이름으로 어떤 메서드인지 나타낼 수 있을 것 같습니다. 
 // DB에 메뉴 data를 추가하는 메서드
 func (m *MenuModel) Add(data []byte) (primitive.ObjectID, error) {
 	// 표준 출력 보다는 logger를 사용하는 것이 어떨까요?

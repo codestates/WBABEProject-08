@@ -22,6 +22,7 @@ type BuyerInfo struct {
 	Address string `bson:"address" json:"address"`
 }
 
+// Orderedmenus의 이름을 변경하는 것은 어떨까요? ID보다는 메뉴명을 넣어야 할 것 같이 느껴집니다. 
 type OrderedList struct {
 	ID primitive.ObjectID `bson:"_id,omitempty"`
 	IsReviewed bool `bson:"isreviewed" json:"isreviewed"`
