@@ -12,7 +12,6 @@ func PanicHandler (err error) {
 
 func GetJsonIdKeyValue(data []byte) (primitive.ObjectID, string, interface{}) {
 	var unMarshared map[string]interface{}
-	// retrun value를 체크하는 것이 좋을 것 같습니다. 
 	err := json.Unmarshal(data, &unMarshared)
 	PanicHandler(err)
 
