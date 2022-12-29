@@ -34,13 +34,13 @@ func main() {
 	dbName := config.Server.DBname
 	// Model0과 Model1보다 조금 더 구체적인 모델명을 사용할 수 있을까요?
 	// Model0, Model1은 local에서만 사용되기 때문에 lowercase로 작성되면 좋겠습니다.
-	Model0 := config.DB["menu"]["model"]
-	Model1 := config.DB["orderedlist"]["model"]
+	menuModel := config.DB["menu"]["model"]
+	orderedListModel := config.DB["orderedlist"]["model"]
 
 	// model 객체 초기화
-	mModel, err := model.GetMenuModel(dbName, host, Model0)
+	mModel, err := model.GetMenuModel(dbName, host, menuModel)
 	errPanic(err)
-	oModel, err := model.GetOrderedListModel(dbName, host, Model1)
+	oModel, err := model.GetOrderedListModel(dbName, host, orderedListModel)
 	errPanic(err)
 
 	// model 객체를 넣어 controller를 만들어줌
