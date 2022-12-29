@@ -42,7 +42,7 @@ func (bc *BuyerController) GetMenuList(c *gin.Context) {
 		c.JSON(404, gin.H{"error" : "해당 카테고리가 존재하지 않습니다."})
 		return
 	}
-	result := bc.MenuModel.GetList(category, int64(iPage))
+	result := bc.MenuModel.GetMenuList(category, int64(iPage))
 
 	c.JSON(200, gin.H{"result" : result})
 }
@@ -164,7 +164,7 @@ func (bc *BuyerController) Order(c *gin.Context) {
 	if err != nil {
 		c.JSON(404, gin.H{"error" : err})
 		return
-	} else if !menu.Orderable {
+	} else if !menu.IsOrderable {
 		c.JSON(400, gin.H{"msg" : "현재 주문이 불가능합니다."})
 		return
 	} else {

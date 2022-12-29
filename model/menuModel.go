@@ -1,12 +1,13 @@
 package model
 
 import (
+	"github.com/codestates/WBABEProject-08/commits/main/log"
 	"go.mongodb.org/mongo-driver/bson"
 	"fmt"
 	"github.com/codestates/WBABEProject-08/commits/main/util"
 	"encoding/json"
 	"context"
-
+	"log"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -51,29 +52,23 @@ func GetMenuModel(db, host, model string) (*MenuModel, error) {
 	return m, nil
 }
 
-// 주석을 사용하기보다는 메서드 이름으로 어떤 메서드인지 나타낼 수 있을 것 같습니다. 
 // DB에 메뉴 data를 추가하는 메서드
-func (m *MenuModel) Add(data []byte) (primitive.ObjectID, error) {
+func (m *MenuModel) AddMenu(data []byte) (primitive.ObjectID, error) {
 	// 표준 출력 보다는 logger를 사용하는 것이 어떨까요?
-	fmt.Println("string: ", string(data))
+	log.Println("string: ", string(data))
 	newMenu := &Menu{}
-	// Unmarshal의 결과를 체크하는 코드를 넣어주세요.
-	json.Unmarshal(data, newMenu)
-
-	fmt.Println("Unmarshar: ", newMenu)
+	err := json.Unmarshal(data, newMenu)
+	
+	logger.Error(err)
 
 	result, err := m.Menucollection.InsertOne(context.TODO(), newMenu)
-	// 아래의 코드를 더 깔끔하게 작성할 수 있을 것 같습니다. 
-	if err != nil {
-		return result.InsertedID.(primitive.ObjectID), err
-	} else {
-		return result.InsertedID.(primitive.ObjectID), nil
-	}
+	
+	return result.InsertedID.(primitive.ObjectID), err
 }
 
 
 // DB 메뉴 data를 업데이트하는 메서드
-func (m *MenuModel) Update(data []byte) (interface{}, error) {
+func (m *MenuModel) UpdateMenu(data []byte) (interface{}, error) {
 	id, key, value := util.GetJsonIdKeyValue(data)
 	
 	filter := bson.D{{Key: "_id", Value: id}}
@@ -89,7 +84,7 @@ func (m *MenuModel) Update(data []byte) (interface{}, error) {
 
 
 // DB 메뉴 data를 삭제하는 메서드
-func (m *MenuModel) Delete(data []byte) (interface{}, error) {
+func (m *MenuModel) DeleteMenu(data []byte) (interface{}, error) {
 	id, _, _ := util.GetJsonIdKeyValue(data)
 	filter := bson.D{{Key: "_id", Value: id}}
 	result, err := m.Menucollection.DeleteOne(context.TODO(), filter)
@@ -103,7 +98,7 @@ func (m *MenuModel) Delete(data []byte) (interface{}, error) {
 
 
 // 메뉴 리스트를 조회하는 메서드
-func (m *MenuModel) GetList(category string, page int64) []Menu {
+func (m *MenuModel) GetMenuList(category string, page int64) []Menu {
 	menus := []Menu{}
 	filter := bson.D{}
 
@@ -111,16 +106,16 @@ func (m *MenuModel) GetList(category string, page int64) []Menu {
 	if category == "suggestion" {
 		filter = bson.D{{Key: "suggestion", Value: true}}
 		cursor, err := m.Menucollection.Find(context.TODO(), filter)
-		util.PanicHandler(err)
+		util.ErrorHandler(err)
 		// cursor.All에 대한 결과값을 체크해주세요.
 		cursor.All(context.TODO(), &menus)
-		util.PanicHandler(err)
+		util.ErrorHandler(err)
 	} else {
 		opt := options.Find().SetSort(bson.D{{Key: category, Value: -1}}).SetLimit(5).SetSkip((page - 1) * 5)
 		cursor, err := m.Menucollection.Find(context.TODO(), filter, opt)
-		util.PanicHandler(err)
+		util.ErrorHandler(err)
 		err = cursor.All(context.TODO(), &menus)
-		util.PanicHandler(err)
+		util.ErrorHandler(err)
 	}
 
 	return menus
@@ -138,7 +133,7 @@ func (m *MenuModel) AddReview(sfoodId string, review *Review) {
 	filter := bson.D{{Key: "_id", Value: foodId}}
 	update := bson.D{{Key: "$set", Value: bson.D{{Key: "reviews", Value: food.Reviews}}}}
 	_, err := m.Menucollection.UpdateOne(context.TODO(), filter, update)
-	util.PanicHandler(err)
+	util.ErrorHandler(err)
 }
 
 
@@ -160,7 +155,7 @@ func (m *MenuModel) LimitAndCountUpdate(id primitive.ObjectID, limit, count int)
 	}
 	_, err := m.Menucollection.UpdateOne(context.TODO(), filter, update)
 	if err != nil {
-		util.PanicHandler(err)
+		util.ErrorHandler(err)
 	}
 }
 
@@ -199,7 +194,7 @@ func (m *MenuModel) CalcAvg(sid string) {
 	}}
 	_, err := m.Menucollection.UpdateOne(context.TODO(), filter, update)
 
-	util.PanicHandler(err)
+	util.ErrorHandler(err)
 }
 
 
@@ -215,7 +210,7 @@ func (m *MenuModel) SuggestionUpdate(suggestion *SuggestionType) error {
 		},
 	}}
 	_, err := m.Menucollection.UpdateMany(context.TODO(), filter, update)
-	util.PanicHandler(err)
+	util.ErrorHandler(err)
 
 	// 이후 새로운 아이디의 음식들을 업데이트해준다.
 	// 배열 핸들링
@@ -238,10 +233,10 @@ func (m *MenuModel) GetAllMenu(page int64) []Menu {
 	filter := bson.D{}
 	option := options.Find().SetLimit(5).SetSkip((page - 1) * 5)
 	cursor, err := m.Menucollection.Find(context.TODO(), filter, option)
-	util.PanicHandler(err)
+	util.ErrorHandler(err)
 
 	err = cursor.All(context.TODO(), &list)
-	util.PanicHandler(err)
+	util.ErrorHandler(err)
 
 	return list
 }

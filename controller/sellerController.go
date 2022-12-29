@@ -82,7 +82,7 @@ func (sc *SellerController) AddMenu(c *gin.Context) {
 	byteData, err := io.ReadAll(body)
 	util.PanicHandler(err)
 
-	result, err := sc.MenuModel.Add(byteData)
+	result, err := sc.MenuModel.AddMenu(byteData)
 	if err != nil {
 		c.JSON(404, gin.H{"msg" : "실패하였습니다.", "err" : err})
 	} else {
@@ -108,7 +108,7 @@ func (sc *SellerController) DeleteMenu(c *gin.Context) {
 	byteDate, err := io.ReadAll(body)
 	util.PanicHandler(err)
 
-	result, err := sc.MenuModel.Delete(byteDate)
+	result, err := sc.MenuModel.DeleteMenu(byteDate)
 	if err != nil {
 		c.JSON(404, gin.H{"msg" : "실패하였습니다.", "err" : err})
 	} else if result == nil {
@@ -136,7 +136,7 @@ func (sc *SellerController) UpdateMenu(c *gin.Context) {
 	data, err := io.ReadAll(body)
 	util.PanicHandler(err)
 
-	result, err := sc.MenuModel.Update(data)
+	result, err := sc.MenuModel.UpdateMenu(data)
 
 	if err != nil {
 		c.JSON(404, gin.H{"msg" : "실패하였습니다.", "err" : err})
