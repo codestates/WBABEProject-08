@@ -8,8 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// ID와 같은 두문자어는 Uppercase로 작성합니다.
-const daycountId = "63a488f6165051c3589bcbe4"
+const daycountID = "63a488f6165051c3589bcbe4"
 
 type BuyerController struct {
 	OrderedListModel *model.OrderedListModel
