@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/codestates/WBABEProject-08/commits/main/util"
 	"fmt"
 	"time"
 	"net/http"
@@ -10,12 +11,6 @@ import (
 	route "github.com/codestates/WBABEProject-08/commits/main/route"
 	conf "github.com/codestates/WBABEProject-08/commits/main/config"
 )
-
-func errPanic(err error) {
-	if err != nil {
-		panic(err)
-	}
-}
 
 func main() {
 	var err error
@@ -32,16 +27,14 @@ func main() {
 	port := config.Server.Port
 	host := config.Server.Host
 	dbName := config.Server.DBname
-	// Model0과 Model1보다 조금 더 구체적인 모델명을 사용할 수 있을까요?
-	// Model0, Model1은 local에서만 사용되기 때문에 lowercase로 작성되면 좋겠습니다.
 	menuModel := config.DB["menu"]["model"]
 	orderedListModel := config.DB["orderedlist"]["model"]
 
 	// model 객체 초기화
 	mModel, err := model.GetMenuModel(dbName, host, menuModel)
-	errPanic(err)
+	util.ErrorHandler(err)
 	oModel, err := model.GetOrderedListModel(dbName, host, orderedListModel)
-	errPanic(err)
+	util.ErrorHandler(err)
 
 	// model 객체를 넣어 controller를 만들어줌
 	controller := ctl.GetController(oModel, mModel)
