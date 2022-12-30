@@ -238,6 +238,13 @@ func (bc *BuyerController) AddOrder(c *gin.Context) {
 
 	// 해당 주문의 현재 상태를 검사한다.
 	order := bc.OrderedListModel.GetOne(addStruct.OrderId)
+	// 이전 주문 메뉴에 현재 추가하려는 메뉴가 있는지 검사
+	for _, value := range order.OrderedmenuIDs {
+		if value == addStruct.NewItem {
+			c.JSON(400, gin.H{"msg" : "이미 해당 메뉴가 포함되어 있습니다."})
+			return
+		}
+	}
 	if (order.Status == "배달중") || (order.Status == "배달완료") {
 		id = bc.OrderedListModel.Add(&addStruct.NewOrder)
 		msg = "주문 추가가 불가능하여 새 주문으로 접수되었습니다."
