@@ -100,15 +100,14 @@ func (sc *SellerController) AddMenu(c *gin.Context) {
 // @Accept  json
 // @Produce  json
 // @Param menuId body model.IdType true "menuId"
-// @Router /seller/delete [post]
+// @Router /seller/menu/{menuid} [delete]
 // @Success 200 {object} string
 // @failure 404 {object} string
 func (sc *SellerController) DeleteMenu(c *gin.Context) {
-	body := c.Request.Body
-	byteDate, err := io.ReadAll(body)
-	util.ErrorHandler(err)
+	id := c.Query("menuid")
+	menuId := util.ConvertStringToObjectId(id)
 
-	result, err := sc.MenuModel.DeleteMenu(byteDate)
+	result, err := sc.MenuModel.DeleteMenu(menuId)
 	if err != nil {
 		c.JSON(404, gin.H{"msg" : "실패하였습니다.", "err" : err})
 	} else if result == nil {

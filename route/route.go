@@ -60,12 +60,12 @@ func (p *Router) Idx() *gin.Engine {
 		// 메뉴 추가하기 -> swagger
 		sGroup.POST("/menu", p.seller.AddMenu)
 
-		// 메뉴 업데이트하기 -> swagger
-		sGroup.PATCH("/menu", p.seller.UpdateMenu)
-
 		// 삭제는 POST보다는 DELETE가 더 좋을 것 같습니다. 
 		// 메뉴 지우기 -> swagger
-		sGroup.POST("/delete", p.seller.DeleteMenu)
+		sGroup.DELETE("/menu", p.seller.DeleteMenu)
+
+		// 메뉴 업데이트하기 -> swagger
+		sGroup.PATCH("/menu", p.seller.UpdateMenu)
 
 		// 추천메뉴 설정하기 -> swagger
 		sGroup.PATCH("/suggestion", p.seller.SuggestMenu)

@@ -33,9 +33,6 @@ type AddMenuDataType struct {
 	Limit int
 	Price int
 	From string
-	Orderedcount int
-	Avg int
-	Suggestion bool
 }
 
 type UpdateMenuDataType struct {
@@ -45,10 +42,8 @@ type UpdateMenuDataType struct {
 }
 
 type AddOrderType struct {
-	IsReviewed bool
-	Status string
 	Buyerinfo BuyerInfo
-	Orderedmenus []primitive.ObjectID
+	OrderedmenuIds []primitive.ObjectID
 }
 
 type AddMenusType struct {

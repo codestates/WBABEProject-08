@@ -119,6 +119,9 @@ func (bc *BuyerController) AddReview(c *gin.Context) {
 	if err != nil {
 		util.ErrorHandler(err)
 	}
+	if review.Score > 5 {
+		c.JSON(400, gin.H{"msg" : "평점은 5점을 넘을 수 없습니다."})
+	}
 	// 먼저 해당 주문에 대한 리뷰가 있는지 확인하고 있다면 멈춘다.
 	orderId := review.OrderId
 	order := bc.OrderedListModel.GetOne(orderId)
@@ -155,7 +158,10 @@ func (bc *BuyerController) AddReview(c *gin.Context) {
 // @failure 400 {object} string
 // @failure 404 {object} string
 func (bc *BuyerController) Order(c *gin.Context) {
-	list := &model.OrderedList{}
+	list := &model.OrderedList{
+		IsReviewed : false,
+		Status : "주문접수",
+	}
 	err := c.ShouldBindJSON(list)
 	util.ErrorHandler(err)
 
@@ -177,8 +183,6 @@ func (bc *BuyerController) Order(c *gin.Context) {
 
 		c.JSON(200, gin.H{"주문아이디" : orderNum, "오늘 주문번호" : dayCount})
 	}
-	
-
 }
 
 
