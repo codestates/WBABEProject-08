@@ -56,7 +56,7 @@ func (sc *SellerController) GetOrderList(c *gin.Context) {
 func (sc *SellerController) UpdateOrderStatus(c *gin.Context) {
 	body := c.Request.Body
 	data, err := io.ReadAll(body)
-	util.PanicHandler(err)
+	util.ErrorHandler(err)
 	orderId, _, _ := util.GetJsonIdKeyValue(data)
 	order := sc.OrderedListModel.GetOne(orderId)
 	
@@ -80,7 +80,7 @@ func (sc *SellerController) UpdateOrderStatus(c *gin.Context) {
 func (sc *SellerController) AddMenu(c *gin.Context) {
 	body := c.Request.Body
 	byteData, err := io.ReadAll(body)
-	util.PanicHandler(err)
+	util.ErrorHandler(err)
 
 	result, err := sc.MenuModel.AddMenu(byteData)
 	if err != nil {
@@ -106,7 +106,7 @@ func (sc *SellerController) AddMenu(c *gin.Context) {
 func (sc *SellerController) DeleteMenu(c *gin.Context) {
 	body := c.Request.Body
 	byteDate, err := io.ReadAll(body)
-	util.PanicHandler(err)
+	util.ErrorHandler(err)
 
 	result, err := sc.MenuModel.DeleteMenu(byteDate)
 	if err != nil {
@@ -134,7 +134,7 @@ func (sc *SellerController) DeleteMenu(c *gin.Context) {
 func (sc *SellerController) UpdateMenu(c *gin.Context) {
 	body := c.Request.Body
 	data, err := io.ReadAll(body)
-	util.PanicHandler(err)
+	util.ErrorHandler(err)
 
 	result, err := sc.MenuModel.UpdateMenu(data)
 
@@ -162,10 +162,10 @@ func (sc *SellerController) UpdateMenu(c *gin.Context) {
 // @failure 404 {object} string
 func (sc *SellerController) SuggestMenu(c *gin.Context) {
 	var suggestion model.SuggestionType
-	// ShouldBindJSON에 대한 Return value를 체크해주세요.
-	c.ShouldBindJSON(&suggestion)
+	err := c.ShouldBindJSON(&suggestion)
+	util.ErrorHandler(err)
 
-	err := sc.MenuModel.SuggestionUpdate(&suggestion)
+	err = sc.MenuModel.SuggestionUpdate(&suggestion)
 	if err != nil {
 		c.JSON(400, gin.H{"error" : err.Error()})
 		return
