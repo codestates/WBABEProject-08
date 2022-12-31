@@ -43,11 +43,11 @@ type UpdateMenuDataType struct {
 
 type AddOrderType struct {
 	Buyerinfo BuyerInfo
-	OrderedmenuIds []primitive.ObjectID
+	OrderedMenus []OrderedMenu
 }
 
 type AddMenusType struct {
-	NewItem primitive.ObjectID
+	NewItem OrderedMenu
 	OrderId primitive.ObjectID
 	Neworder AddOrderType
 }

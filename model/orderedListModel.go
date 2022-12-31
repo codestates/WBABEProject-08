@@ -22,12 +22,17 @@ type BuyerInfo struct {
 	Address string `bson:"address" json:"address"`
 }
 
+type OrderedMenu struct {
+	MenuId primitive.ObjectID `bson:"menuid" json:"menuid"`
+	Amount int `bson:"amount" json:"amount"`
+}
+
 type OrderedList struct {
 	ID primitive.ObjectID `bson:"_id,omitempty"`
 	IsReviewed bool `bson:"isreviewed" json:"isreviewed"`
 	Status string `bson:"status" json:"status"`
 	BuyerInfo BuyerInfo `bson:"buyerinfo" json:"buyerinfo"`
-	OrderedmenuIDs []primitive.ObjectID `bson:"orderedmenus"`
+	OrderedMenus []OrderedMenu `bson:"orderedmenus" json:"orderedmenus"`
 }
 
 type DayCounter struct {
@@ -127,9 +132,9 @@ func (o *OrderedListModel) Add(list *OrderedList) primitive.ObjectID {
 func (o *OrderedListModel) ChangeOrder(order *OrderedList, change *ChangeMenuType) error {
 	isChanged := false
 	// 먼저 변경하고싶은 메뉴가 orderlist에 있는지 확인한다.
-	for idx, value := range order.OrderedmenuIDs {
-		if value == change.LegacyFoodId {
-			order.OrderedmenuIDs[idx] = change.NewFoodId
+	for idx, value := range order.OrderedMenus {
+		if value.MenuId == change.LegacyFoodId {
+			order.OrderedMenus[idx].MenuId = change.NewFoodId
 			isChanged = true
 		}
 	}
@@ -137,7 +142,7 @@ func (o *OrderedListModel) ChangeOrder(order *OrderedList, change *ChangeMenuTyp
 		return errors.New("주문 내역에 해당 메뉴가 존재하지 않습니다")
 	}
 	filter := bson.D{{Key: "_id", Value: change.OrderId}}
-	update := bson.D{{Key: "$set", Value: bson.D{{Key: "orderedmenus", Value: order.OrderedmenuIDs}}}}
+	update := bson.D{{Key: "$set", Value: bson.D{{Key: "orderedmenus", Value: order.OrderedMenus}}}}
 	_, err := o.Collection.UpdateOne(context.TODO(), filter, update)
 	util.ErrorHandler(err)
 
@@ -149,8 +154,8 @@ func (o *OrderedListModel) ChangeOrder(order *OrderedList, change *ChangeMenuTyp
 func (o *OrderedListModel) AddOrder(addStruct *AddMenuType, legacyOrder *OrderedList) primitive.ObjectID {
 	// 추가하고자 하는 음식의 아이디를 이전 주문의 음식 배열에 넣어주는 로직
 	filter := bson.D{{Key: "_id", Value: addStruct.OrderId}}
-	legacyOrder.OrderedmenuIDs = append(legacyOrder.OrderedmenuIDs, addStruct.NewItem)
-	update := bson.D{{Key: "$set", Value: bson.D{{Key: "orderedmenus", Value: legacyOrder.OrderedmenuIDs}}}}
+	legacyOrder.OrderedMenus = append(legacyOrder.OrderedMenus, OrderedMenu{MenuId: addStruct.NewItem, Amount: 1})
+	update := bson.D{{Key: "$set", Value: bson.D{{Key: "orderedmenus", Value: legacyOrder.OrderedMenus}}}}
 	_, err := o.Collection.UpdateOne(context.TODO(), filter, update)
 	util.ErrorHandler(err)
 

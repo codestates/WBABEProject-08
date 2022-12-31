@@ -91,7 +91,7 @@ func (bc *BuyerController) GetOrderStatus(c *gin.Context) {
 	orderId := util.ConvertStringToObjectId(c.Param("orderid"))
 	order := bc.OrderedListModel.GetOne(orderId)
 	// 존재하지 않는 id를 입력했을때의 처리
-	if len(order.OrderedmenuIDs) == 0 {
+	if len(order.OrderedMenus) == 0 {
 		c.JSON(400, gin.H{"msg" : "존재하지 않는 주문입니다."})
 		return
 	} else {
@@ -166,7 +166,7 @@ func (bc *BuyerController) Order(c *gin.Context) {
 	util.ErrorHandler(err)
 
 	// 주문하기 전에 메뉴가 주문 가능한지 확인
-	menu, err := bc.MenuModel.GetOneMenu(list.OrderedmenuIDs[0])
+	menu, err := bc.MenuModel.GetOneMenu(list.OrderedMenus[0].MenuId)
 	if err != nil {
 		c.JSON(404, gin.H{"error" : err})
 		return
@@ -239,8 +239,8 @@ func (bc *BuyerController) AddOrder(c *gin.Context) {
 	// 해당 주문의 현재 상태를 검사한다.
 	order := bc.OrderedListModel.GetOne(addStruct.OrderId)
 	// 이전 주문 메뉴에 현재 추가하려는 메뉴가 있는지 검사
-	for _, value := range order.OrderedmenuIDs {
-		if value == addStruct.NewItem {
+	for _, value := range order.OrderedMenus {
+		if value.MenuId == addStruct.NewItem {
 			c.JSON(400, gin.H{"msg" : "이미 해당 메뉴가 포함되어 있습니다."})
 			return
 		}
