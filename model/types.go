@@ -16,7 +16,7 @@ type AddMenuType struct {
 type ChangeMenuType struct {
 	OrderId primitive.ObjectID `json:"orderid"`
 	LegacyFoodId primitive.ObjectID `json:"legacyfoodid"`
-	NewFoodId primitive.ObjectID `json:"newfoodid"`
+	NewMenu OrderedMenu `json:"newmenu"`
 }
 
 type SuggestionType struct {

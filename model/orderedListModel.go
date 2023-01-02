@@ -134,13 +134,14 @@ func (o *OrderedListModel) ChangeOrder(order *OrderedList, change *ChangeMenuTyp
 	// 먼저 변경하고싶은 메뉴가 orderlist에 있는지 확인한다.
 	for idx, value := range order.OrderedMenus {
 		if value.MenuId == change.LegacyFoodId {
-			order.OrderedMenus[idx].MenuId = change.NewFoodId
+			order.OrderedMenus[idx] = change.NewMenu
 			isChanged = true
 		}
 	}
 	if !isChanged {
 		return errors.New("주문 내역에 해당 메뉴가 존재하지 않습니다")
 	}
+
 	filter := bson.D{{Key: "_id", Value: change.OrderId}}
 	update := bson.D{{Key: "$set", Value: bson.D{{Key: "orderedmenus", Value: order.OrderedMenus}}}}
 	_, err := o.Collection.UpdateOne(context.TODO(), filter, update)

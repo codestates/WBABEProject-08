@@ -220,13 +220,33 @@ func (bc *BuyerController) ChangeOrder(c *gin.Context) {
 	util.ErrorHandler(err)
 
 	order := bc.OrderedListModel.GetOne(changeMenuStruct.OrderId)
-	if (order.Status == "배달중") || (order.Status == "배달완료") {
+	legacyMenu, _ := bc.MenuModel.GetOneMenu(changeMenuStruct.LegacyFoodId)
+	var legacyFoodAmount int
+	for _, menu := range order.OrderedMenus {
+		if menu.MenuId == legacyMenu.ID {
+			legacyFoodAmount = menu.Amount
+		}
+	}
+	newMenu, _ := bc.MenuModel.GetOneMenu(changeMenuStruct.NewMenu.MenuId)
+	// 추가하려는 메뉴가 주문 가능한 수량을 가지고 있는지 확인하는 로직 추가
+	if newMenu.Limit < changeMenuStruct.NewMenu.Amount {
+		c.JSON(400, gin.H{"msg" : "해당 메뉴의 수량이 부족합니다.", "남은 수량" : newMenu.Limit})
+		return
+	} else if (order.Status == "배달중") || (order.Status == "배달완료") {
 		c.JSON(400, gin.H{"msg" : "조리가 완료되어 메뉴 변경이 불가능합니다."})
+		return
 	} else {
 		err := bc.OrderedListModel.ChangeOrder(order, changeMenuStruct)
 		if err != nil {
+			// 원래 주문에 legacyfood가 포함되어 있지 않을 경우 에러 반환
 			c.JSON(400, gin.H{"error" : err.Error()})
+			return
 		} else {
+			// 주문에서 제외한 음식과 변경된 음식의 limit, orderedcount 업데이트 로직 추가
+			// legacy 메뉴에서는 limit++, count--를 해줘야 한다.
+			bc.MenuModel.LimitAndCountUpdate(legacyMenu.ID, legacyMenu.Limit, legacyMenu.Orderedcount, -legacyFoodAmount)
+			// new 메뉴에서는 limit--, count++를 해줘야 한다.
+			bc.MenuModel.LimitAndCountUpdate(newMenu.ID, newMenu.Limit, newMenu.Orderedcount, changeMenuStruct.NewMenu.Amount)
 			c.JSON(200, gin.H{"msg" : "메뉴 변경이 완료되었습니다."})
 		}
 	}
