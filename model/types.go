@@ -7,7 +7,7 @@ import (
 // 메뉴를 추가할 때 body에 해당하는 구조체
 type AddMenuType struct {
 	NewOrder OrderedList `json:"neworder"`
-	NewItem primitive.ObjectID `json:"newitem"`
+	NewItem OrderedMenu `json:"newitem"`
 	OrderId primitive.ObjectID `json:"orderid"`
 }
 
@@ -44,10 +44,4 @@ type UpdateMenuDataType struct {
 type AddOrderType struct {
 	Buyerinfo BuyerInfo
 	OrderedMenus []OrderedMenu
-}
-
-type AddMenusType struct {
-	NewItem OrderedMenu
-	OrderId primitive.ObjectID
-	Neworder AddOrderType
 }

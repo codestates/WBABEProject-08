@@ -241,7 +241,7 @@ func (bc *BuyerController) ChangeOrder(c *gin.Context) {
 // @name AddOrder
 // @Accept  json
 // @Produce  json
-// @Param addData body model.AddMenusType true "addData"
+// @Param addData body model.AddMenuType true "addData"
 // @Router /buyer/order/add [patch]
 // @Success 200 {object} string
 func (bc *BuyerController) AddOrder(c *gin.Context) {
@@ -256,7 +256,7 @@ func (bc *BuyerController) AddOrder(c *gin.Context) {
 	order := bc.OrderedListModel.GetOne(addStruct.OrderId)
 	// 이전 주문 메뉴에 현재 추가하려는 메뉴가 있는지 검사
 	for _, value := range order.OrderedMenus {
-		if value.MenuId == addStruct.NewItem {
+		if value.MenuId == addStruct.NewItem.MenuId {
 			c.JSON(400, gin.H{"msg" : "이미 해당 메뉴가 포함되어 있습니다."})
 			return
 		}
@@ -265,6 +265,14 @@ func (bc *BuyerController) AddOrder(c *gin.Context) {
 		id = bc.OrderedListModel.Add(&addStruct.NewOrder)
 		msg = "주문 추가가 불가능하여 새 주문으로 접수되었습니다."
 	} else {
+		// 새로 추가하고자 하는 메뉴에 대해서 주문 가능한 limit이 있는지 확인하는 로직 추가
+		newMenu, _ := bc.MenuModel.GetOneMenu(addStruct.NewItem.MenuId)
+		if newMenu.Limit < addStruct.NewItem.Amount {
+			c.JSON(400, gin.H{"msg" : "해당 메뉴의 수량이 부족합니다.", "남은 수량" : newMenu.Limit})
+			return
+		}
+		// 추가한 메뉴에 대하여 limit과 count를 업로드해주는 로직 추가
+		bc.MenuModel.LimitAndCountUpdate(newMenu.ID, newMenu.Limit, newMenu.Orderedcount, addStruct.NewItem.Amount)
 		id = bc.OrderedListModel.AddOrder(&addStruct, order)
 		msg = "주문 추가가 정상적으로 완료되었습니다."
 	}

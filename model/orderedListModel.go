@@ -152,9 +152,9 @@ func (o *OrderedListModel) ChangeOrder(order *OrderedList, change *ChangeMenuTyp
 
 // 주문 메뉴 추가하기
 func (o *OrderedListModel) AddOrder(addStruct *AddMenuType, legacyOrder *OrderedList) primitive.ObjectID {
-	// 추가하고자 하는 음식의 아이디를 이전 주문의 음식 배열에 넣어주는 로직
+	// 추가하고자 하는 음식의 정보를 이전 주문의 음식 배열에 넣어주는 로직
 	filter := bson.D{{Key: "_id", Value: addStruct.OrderId}}
-	legacyOrder.OrderedMenus = append(legacyOrder.OrderedMenus, OrderedMenu{MenuId: addStruct.NewItem, Amount: 1})
+	legacyOrder.OrderedMenus = append(legacyOrder.OrderedMenus, addStruct.NewItem)
 	update := bson.D{{Key: "$set", Value: bson.D{{Key: "orderedmenus", Value: legacyOrder.OrderedMenus}}}}
 	_, err := o.Collection.UpdateOne(context.TODO(), filter, update)
 	util.ErrorHandler(err)
