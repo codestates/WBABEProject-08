@@ -165,24 +165,40 @@ func (bc *BuyerController) Order(c *gin.Context) {
 	err := c.ShouldBindJSON(list)
 	util.ErrorHandler(err)
 
-	// 주문하기 전에 메뉴가 주문 가능한지 확인
-	menu, err := bc.MenuModel.GetOneMenu(list.OrderedMenus[0].MenuId)
-	if err != nil {
-		c.JSON(404, gin.H{"error" : err})
-		return
-	} else if !menu.IsOrderable {
-		c.JSON(400, gin.H{"msg" : "현재 주문이 불가능합니다."})
-		return
-	} else {
-		// 있다면 limit -1, count +1
-		bc.MenuModel.LimitAndCountUpdate(menu.ID, menu.Limit, menu.Orderedcount)
-		// 그리고 DayOrderCount 1 추가
-		dayCount := bc.OrderedListModel.DayOrderCount(daycountID)
-		// 주문 추가
-		orderNum := bc.OrderedListModel.Add(list)
+	menus := []model.Menu{}
 
-		c.JSON(200, gin.H{"주문아이디" : orderNum, "오늘 주문번호" : dayCount})
+	// 주문하기 전에 메뉴가 주문 가능한지 확인
+	// 메뉴 리스트를 돌면서 모든 메뉴가 주문 가능한 상태인지 확인한다.
+	for i := 0; i < len(list.OrderedMenus); i++ {
+		menu, err := bc.MenuModel.GetOneMenu(list.OrderedMenus[i].MenuId)
+		if err != nil {
+			c.JSON(404, gin.H{"error" : err})
+			return
+		} else if !menu.IsOrderable {
+			c.JSON(400, gin.H{"해당 메뉴는 현재 주문이 불가능합니다." : menu.Name})
+			return
+		// 주문 가능한 메뉴 수량 체크 로직 추가
+		} else if menu.Limit < list.OrderedMenus[i].Amount {
+			c.JSON(400, gin.H{"msg" : "해당 메뉴의 수량이 부족합니다.", "남은 수량" : menu.Limit})
+		} else {
+			menus = append(menus, *menu)
+		}
 	}
+	var dayCount int
+	var orderNum primitive.ObjectID
+	// 메뉴별로 판매 수량 및 판매 가능 수량을 업데이트해준다.
+	for idx, menu := range menus {
+		// 있다면 수량만큼 limit--, count++
+		// goroutine으로 실행할지 여부 생각하기
+		bc.MenuModel.LimitAndCountUpdate(menu.ID, menu.Limit, menu.Orderedcount, list.OrderedMenus[idx].Amount)
+	}
+	// 한 개의 주문이기 때문에 dayCount++ 와 주문 추가 작업은 한 번만 해준다.
+	// 그리고 DayOrderCount 1 추가
+	dayCount = bc.OrderedListModel.DayOrderCount(daycountID)
+	// 주문 추가
+	orderNum = bc.OrderedListModel.Add(list)
+
+	c.JSON(200, gin.H{"주문아이디" : orderNum, "오늘 주문번호" : dayCount})
 }
 
 
