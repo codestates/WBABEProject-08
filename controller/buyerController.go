@@ -119,27 +119,35 @@ func (bc *BuyerController) AddReview(c *gin.Context) {
 	if err != nil {
 		util.ErrorHandler(err)
 	}
+	// 평점이 5점 이상이라면 abort한다.
 	if review.Score > 5 {
 		c.JSON(400, gin.H{"msg" : "평점은 5점을 넘을 수 없습니다."})
 		return
 	}
-	// 먼저 해당 주문에 대한 리뷰가 있는지 확인하고 있다면 멈춘다.
+	foodId := c.Param("menuid")
+	// 먼저 해당 주문에 대한 리뷰 완료되었는지 확인한다.
 	orderId := review.OrderId
 	order := bc.OrderedListModel.GetOne(orderId)
 	if order.IsReviewed {
-		c.JSON(400, gin.H{"msg" : "이미 후기가 작성된 주문입니다."})
+		c.JSON(400, gin.H{"msg" : "이미 후기작성이 완료된 주문입니다."})
 		return
+	}
+	// 그리고 해당 주문의 해당 메뉴에 대해서 리뷰가 작성되었는지 확인한다.
+	for _, value := range order.OrderedMenus {
+		if value.MenuId == util.ConvertStringToObjectId(foodId) && value.IsReviewed {
+			c.JSON(400, gin.H{"msg" : "이미 해당 메뉴에 대한 후기가 작성되었습니다."})
+			return
+		}
 	}
 
 	// 음식에 리뷰를 추가한다.
-	foodId := c.Param("menuid")
 	bc.MenuModel.AddReview(foodId, review)
 
-	// 주문내에서 해당 메뉴의 리뷰 작성 여부를 업데이트한다.
-	IsReviewed := bc.OrderedListModel.UpdateMenuReviewable(order, util.ConvertStringToObjectId(foodId))
+	// 주문내에서 해당 "메뉴의 리뷰 작성 여부"를 업데이트한다.
+	isOrderReviewed := bc.OrderedListModel.UpdateMenuReviewable(order, util.ConvertStringToObjectId(foodId))
 
-	// 만약 모든 메뉴의 IsReviewed가 true라면, 주문의 전체 리뷰 여부도 업데이트 해준다.
-	if IsReviewed {
+	// 만약 모든 메뉴의 IsReviewed가 true라면, "주문의 전체 리뷰 여부"도 업데이트 해준다.
+	if isOrderReviewed {
 		bc.OrderedListModel.UpdateOrderReviewable(review.OrderId)
 	}
 
