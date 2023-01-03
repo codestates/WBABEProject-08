@@ -115,14 +115,21 @@ https://quilt-stoplight-9b6.notion.site/Docs-0c6140c809904bdcb46a41fbbea48369
 
 ## buyer - 주문에 메뉴 추가시 중복 체크
   - 주문에 메뉴를 추가할 경우, 해당 주문에 이미 같은 메뉴가 있는지 확인하는 로직을 추가
-  <img width="735" alt="스크린샷 2023-01-03 15 16 59" src="https://user-images.githubusercontent.com/100397903/210308124-3c8799be-f047-4ec9-83a3-86af025ba826.png">
-  <img width="725" alt="스크린샷 2023-01-03 15 17 20" src="https://user-images.githubusercontent.com/100397903/210308154-3f73cda5-ce80-44bd-9f8a-7bf7b602b052.png">
-  <img width="735" alt="스크린샷 2023-01-03 15 18 23" src="https://user-images.githubusercontent.com/100397903/210308243-bc862bd1-7e22-47a2-a13a-94e326912b2f.png">
+    <img width="735" alt="스크린샷 2023-01-03 15 16 59" src="https://user-images.githubusercontent.com/100397903/210308124-3c8799be-f047-4ec9-83a3-86af025ba826.png">
+    <img width="725" alt="스크린샷 2023-01-03 15 17 20" src="https://user-images.githubusercontent.com/100397903/210308154-3f73cda5-ce80-44bd-9f8a-7bf7b602b052.png">
+    <img width="735" alt="스크린샷 2023-01-03 15 18 23" src="https://user-images.githubusercontent.com/100397903/210308243-bc862bd1-7e22-47a2-a13a-94e326912b2f.png">
+    <img width="724" alt="스크린샷 2023-01-03 15 23 32" src="https://user-images.githubusercontent.com/100397903/210308722-8a2c233c-45a1-41eb-8018-9e38f82bb5bd.png">
 
 
 ## buyer - 리뷰 작성시
   - 평점이 5를 초과하면 abort하는 로직 추가
   - 해당 주문의 각 메뉴에 대해 리뷰가 가능하고, 주문의 모든 메뉴에 대한 리뷰가 완료되었을 시, 주문의 전체 리뷰 여부를 true로 업데이트하는 로직 추가
+    <img width="730" alt="스크린샷 2023-01-03 15 25 26" src="https://user-images.githubusercontent.com/100397903/210308867-28702b65-67c1-45ae-bd90-0fe198a6a95f.png">
+    <img width="727" alt="스크린샷 2023-01-03 15 26 00" src="https://user-images.githubusercontent.com/100397903/210308923-7a6f0ecd-f1d4-4c50-884d-e5f68d649ecf.png">
+    <img width="741" alt="스크린샷 2023-01-03 15 26 11" src="https://user-images.githubusercontent.com/100397903/210308946-f477dc4e-4119-4132-9469-14dc220caf3e.png">
+    <img width="735" alt="스크린샷 2023-01-03 15 27 29" src="https://user-images.githubusercontent.com/100397903/210309091-3079789d-2c77-42c5-b17a-cc38d7c8e880.png">
+
+
   
 ## seller - 새로운 메뉴 데이터 추가시
   - OrderedCount, Avg, Suggestion, IsVisible값을 각각 0, 0, false, true로 default 설정을 해 주어 새로운 메뉴 데이터 추가시 payload에 포함시키지 않도록 수정
