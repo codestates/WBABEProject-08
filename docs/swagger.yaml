@@ -1,8 +1,6 @@
 definitions:
   model.AddMenuDataType:
     properties:
-      avg:
-        type: integer
       from:
         type: string
       limit:
@@ -11,34 +9,26 @@ definitions:
         type: string
       orderable:
         type: boolean
-      orderedcount:
-        type: integer
       price:
         type: integer
-      suggestion:
-        type: boolean
     type: object
-  model.AddMenusType:
+  model.AddMenuType:
     properties:
-      newItem:
-        type: string
+      newitem:
+        $ref: '#/definitions/model.OrderedMenu'
       neworder:
-        $ref: '#/definitions/model.AddOrderType'
-      orderId:
+        $ref: '#/definitions/model.OrderedList'
+      orderid:
         type: string
     type: object
   model.AddOrderType:
     properties:
       buyerinfo:
         $ref: '#/definitions/model.BuyerInfo'
-      isReviewed:
-        type: boolean
-      orderedmenus:
+      orderedMenus:
         items:
-          type: string
+          $ref: '#/definitions/model.OrderedMenu'
         type: array
-      status:
-        type: string
     type: object
   model.BuyerInfo:
     properties:
@@ -51,8 +41,8 @@ definitions:
     properties:
       legacyfoodid:
         type: string
-      newfoodid:
-        type: string
+      newmenu:
+        $ref: '#/definitions/model.OrderedMenu'
       orderid:
         type: string
     type: object
@@ -69,6 +59,8 @@ definitions:
         type: string
       id:
         type: string
+      isvisible:
+        type: boolean
       limit:
         type: integer
       name:
@@ -85,6 +77,30 @@ definitions:
         type: array
       suggestion:
         type: boolean
+    type: object
+  model.OrderedList:
+    properties:
+      buyerinfo:
+        $ref: '#/definitions/model.BuyerInfo'
+      id:
+        type: string
+      isreviewed:
+        type: boolean
+      orderedmenus:
+        items:
+          $ref: '#/definitions/model.OrderedMenu'
+        type: array
+      status:
+        type: string
+    type: object
+  model.OrderedMenu:
+    properties:
+      amount:
+        type: integer
+      idreviewed:
+        type: boolean
+      menuid:
+        type: string
     type: object
   model.Review:
     properties:
@@ -228,7 +244,7 @@ paths:
         name: addData
         required: true
         schema:
-          $ref: '#/definitions/model.AddMenusType'
+          $ref: '#/definitions/model.AddMenuType'
       produces:
       - application/json
       responses:
@@ -324,18 +340,17 @@ paths:
       summary: 메뉴별 리뷰와 평점을 작성합니다.
       tags:
       - Buyer
-  /seller/delete:
-    post:
+  /seller/menu:
+    delete:
       consumes:
       - application/json
       description: 메뉴를 삭제하기 위한 함수
       parameters:
-      - description: menuId
-        in: body
-        name: menuId
+      - description: menuid
+        in: query
+        name: menuid
         required: true
-        schema:
-          $ref: '#/definitions/model.IdType'
+        type: string
       produces:
       - application/json
       responses:
@@ -350,7 +365,6 @@ paths:
       summary: DB에서 메뉴를 삭제합니다.
       tags:
       - Seller
-  /seller/menu:
     patch:
       consumes:
       - application/json

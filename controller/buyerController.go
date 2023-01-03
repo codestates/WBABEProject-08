@@ -199,6 +199,7 @@ func (bc *BuyerController) Order(c *gin.Context) {
 		// 주문 가능한 메뉴 수량 체크 로직 추가
 		} else if menu.Limit < list.OrderedMenus[i].Amount {
 			c.JSON(400, gin.H{"msg" : "해당 메뉴의 수량이 부족합니다.", "남은 수량" : menu.Limit})
+			return
 		} else {
 			menus = append(menus, *menu)
 		}

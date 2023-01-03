@@ -153,7 +153,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.AddMenusType"
+                            "$ref": "#/definitions/model.AddMenuType"
                         }
                     }
                 ],
@@ -334,46 +334,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/seller/delete": {
-            "post": {
-                "description": "메뉴를 삭제하기 위한 함수",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Seller"
-                ],
-                "summary": "DB에서 메뉴를 삭제합니다.",
-                "parameters": [
-                    {
-                        "description": "menuId",
-                        "name": "menuId",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.IdType"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
         "/seller/menu": {
             "post": {
                 "description": "새 메뉴를 추가하기 위한 함수",
@@ -396,6 +356,42 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/model.AddMenuDataType"
                         }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "메뉴를 삭제하기 위한 함수",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Seller"
+                ],
+                "summary": "DB에서 메뉴를 삭제합니다.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "menuid",
+                        "name": "menuid",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -564,9 +560,6 @@ const docTemplate = `{
         "model.AddMenuDataType": {
             "type": "object",
             "properties": {
-                "avg": {
-                    "type": "integer"
-                },
                 "from": {
                     "type": "string"
                 },
@@ -579,27 +572,21 @@ const docTemplate = `{
                 "orderable": {
                     "type": "boolean"
                 },
-                "orderedcount": {
-                    "type": "integer"
-                },
                 "price": {
                     "type": "integer"
-                },
-                "suggestion": {
-                    "type": "boolean"
                 }
             }
         },
-        "model.AddMenusType": {
+        "model.AddMenuType": {
             "type": "object",
             "properties": {
-                "newItem": {
-                    "type": "string"
+                "newitem": {
+                    "$ref": "#/definitions/model.OrderedMenu"
                 },
                 "neworder": {
-                    "$ref": "#/definitions/model.AddOrderType"
+                    "$ref": "#/definitions/model.OrderedList"
                 },
-                "orderId": {
+                "orderid": {
                     "type": "string"
                 }
             }
@@ -610,17 +597,11 @@ const docTemplate = `{
                 "buyerinfo": {
                     "$ref": "#/definitions/model.BuyerInfo"
                 },
-                "isReviewed": {
-                    "type": "boolean"
-                },
-                "orderedmenus": {
+                "orderedMenus": {
                     "type": "array",
                     "items": {
-                        "type": "string"
+                        "$ref": "#/definitions/model.OrderedMenu"
                     }
-                },
-                "status": {
-                    "type": "string"
                 }
             }
         },
@@ -641,8 +622,8 @@ const docTemplate = `{
                 "legacyfoodid": {
                     "type": "string"
                 },
-                "newfoodid": {
-                    "type": "string"
+                "newmenu": {
+                    "$ref": "#/definitions/model.OrderedMenu"
                 },
                 "orderid": {
                     "type": "string"
@@ -669,6 +650,9 @@ const docTemplate = `{
                 "id": {
                     "type": "string"
                 },
+                "isvisible": {
+                    "type": "boolean"
+                },
                 "limit": {
                     "type": "integer"
                 },
@@ -692,6 +676,43 @@ const docTemplate = `{
                 },
                 "suggestion": {
                     "type": "boolean"
+                }
+            }
+        },
+        "model.OrderedList": {
+            "type": "object",
+            "properties": {
+                "buyerinfo": {
+                    "$ref": "#/definitions/model.BuyerInfo"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "isreviewed": {
+                    "type": "boolean"
+                },
+                "orderedmenus": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.OrderedMenu"
+                    }
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.OrderedMenu": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "integer"
+                },
+                "idreviewed": {
+                    "type": "boolean"
+                },
+                "menuid": {
+                    "type": "string"
                 }
             }
         },
