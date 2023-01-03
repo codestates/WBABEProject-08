@@ -25,6 +25,7 @@ type BuyerInfo struct {
 type OrderedMenu struct {
 	MenuId primitive.ObjectID `bson:"menuid" json:"menuid"`
 	Amount int `bson:"amount" json:"amount"`
+	IsReviewed bool `bson:"isreviewed" json:"idreviewed,omitempty"`
 }
 
 type OrderedList struct {
@@ -110,11 +111,35 @@ func (o *OrderedListModel) UpdateStatus(order *OrderedList) string {
 
 
 // 주문내역의 리뷰 작성 여부 업데이트하는 메서드
-func (o *OrderedListModel) UpdateReviewable(id primitive.ObjectID) {
+func (o *OrderedListModel) UpdateOrderReviewable(id primitive.ObjectID) {
 	filter := bson.D{{Key: "_id", Value: id}}
 	update := bson.D{{Key: "$set", Value: bson.D{{Key: "isreviewed", Value: true}}}}
 	_, err := o.Collection.UpdateOne(context.TODO(), filter, update)
 	util.ErrorHandler(err)
+}
+
+
+// 개별 메뉴의 리뷰 작성 여부 업데이트하는 메서드
+func (o *OrderedListModel) UpdateMenuReviewable(order *OrderedList, foodId primitive.ObjectID) bool {
+	// 먼저 메뉴를 돌며 리뷰가 작성된 녀석의 IsReviewed를 true로 바꿔줌
+	for i := 0; i < len(order.OrderedMenus); i++ {
+		if order.OrderedMenus[i].MenuId == foodId {
+			order.OrderedMenus[i].IsReviewed = true
+		}
+	}
+	// true로 변경된 OrderedMenus 배열을 기존 주문에 업데이트 해줌
+	filter := bson.D{{Key: "_id", Value: order.ID}}
+	update := bson.D{{Key: "$set", Value: bson.D{{Key: "orderedmenus", Value: order.OrderedMenus}}}}
+	_, err := o.Collection.UpdateOne(context.TODO(), filter, update)
+	util.ErrorHandler(err)
+
+	// for문을 돌며, 주문한 음식 중 한개라도 리뷰가 작성이 안되어있으면 false, 모두 리뷰가 작성되어있으면 true를 리턴한다.
+	for i := 0; i < len(order.OrderedMenus); i++ {
+		if !order.OrderedMenus[i].IsReviewed {
+			return false
+		}
+	}
+	return true
 }
 
 
