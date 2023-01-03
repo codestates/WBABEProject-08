@@ -1,3 +1,51 @@
+# (주문)생산자와 (주문)소비자 간 역할 수행 서비스를 제공하는 서버
+
+gin 프레임워크를 이용한 WAS 서버를 통해 주문 생산과 주문 소비가 이루어진다.
+생산자와 소비자는 url의 1차 path에서 buyer / seller로 구분된다.
+
+### 시작하기
+
+toml 파일을 자신의 환경에 맞게 바꿔준다.
+
+- config/config.toml
+
+```toml
+port = "WAS 서버를 실행시킬 포트번호"
+host = "서버와 연동할 mongoDB실행 url"
+```
+
+실행을 위한 go package를 설치한다.
+
+- go 의존성 패키지 설치
+
+```shell
+go mod init
+go mod tidy
+```
+
+swagger 파일을 만들어준다
+
+- swagger 패키지 설치
+
+```shell
+swag init
+```
+
+#
+
+- main 파일 실행
+
+```shell
+go run main.go
+```
+
+- 일별 주문번호의 정상적인 count를 위해선 orderedlist 컬렉션에 아래와 같이 {daycount : 0} 의 데이터를 먼저 넣어주어야 한다.
+  <img width="233" alt="스크린샷 2022-12-28 13 28 09" src="https://user-images.githubusercontent.com/100397903/209757411-95b2d6be-b243-43b6-9817-aa1241f958f1.png">
+  <img width="992" alt="스크린샷 2022-12-28 13 26 10" src="https://user-images.githubusercontent.com/100397903/209757348-eee6a96a-af9c-4291-98d2-aa07c86fbb8b.png">
+
+* 이후 controller/buyercontroller.go 파일 상단의 daycountID 상수를 생성된 daycount Document의 ObjectId로 변경해줄
+  <img width="578" alt="스크린샷 2023-01-03 15 45 17" src="https://user-images.githubusercontent.com/100397903/210310815-090f3766-eacb-477d-868b-832464c109f7.png">
+
 ### 코드 구성
 
 코드 구성에 대한 정보는 우측 페이지에서 확인할 수 있다.
