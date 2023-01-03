@@ -78,7 +78,7 @@ swagger 파일을 만들어준다
   - buyer - 주문하기(주문이 완료되면 해당 메뉴의 orderedcount + 1, limit - 1이 이루어지고, limit이 0인 상태로 주문을 하게 되면 abort된다.)
   <img width="716" alt="스크린샷 2022-12-28 16 30 37" src="https://user-images.githubusercontent.com/100397903/209775380-ef9052b3-e071-4806-a6c2-525ae555af18.png">
 
-  - buyer - 주문 추가하기(주문의 상태가 배달중/배달완료일 경우 새 주문으로 추가됨)
+  - buyer - 주문에 메뉴 추가하기(주문의 상태가 배달중/배달완료일 경우 새 주문으로 추가됨)
   <img width="718" alt="스크린샷 2022-12-28 17 27 55" src="https://user-images.githubusercontent.com/100397903/209782481-4ae3e50f-1a2b-4fec-a80d-4aefcce9e9fa.png">
   <img width="726" alt="스크린샷 2022-12-28 17 30 04" src="https://user-images.githubusercontent.com/100397903/209782682-65019cf7-a9ab-4262-9a19-e88b1691175c.png">
 
@@ -101,3 +101,33 @@ swagger 파일을 만들어준다
 ### 코드 구성
 코드 구성에 대한 정보는 우측 페이지에서 확인할 수 있다.
 https://quilt-stoplight-9b6.notion.site/Docs-0c6140c809904bdcb46a41fbbea48369
+
+
+# 피드백 반영 개선사항
+
+## buyer - 주문하기
+  - 메뉴를 주문, 추가, 변경할 때 수량을 기입할 수 있도록 수정
+  - 주문과 관련하여 메뉴 추가, 변경, 새 주문시 각 메뉴의 현재 주문 가능한 Limit을 확인하고 그 이상일 경우 abort하는 로직 전체적으로 추가
+  - IsReviewed, Status 값을 각각 false, “주문접수” 로 default 설정을 해 주어 주문시 payload에서 제외
+    <img width="744" alt="스크린샷 2023-01-03 15 04 37" src="https://user-images.githubusercontent.com/100397903/210307021-26603a23-af7a-4e03-8ddb-ca3afc14458a.png">
+    <img width="723" alt="스크린샷 2023-01-03 15 07 45" src="https://user-images.githubusercontent.com/100397903/210307267-a8511d50-b27f-41d4-a5f5-1d5a84b948f3.png">
+
+
+## buyer - 주문에 메뉴 추가시 중복 체크
+  - 주문에 메뉴를 추가할 경우, 해당 주문에 이미 같은 메뉴가 있는지 확인하는 로직을 추가
+  <img width="735" alt="스크린샷 2023-01-03 15 16 59" src="https://user-images.githubusercontent.com/100397903/210308124-3c8799be-f047-4ec9-83a3-86af025ba826.png">
+  <img width="725" alt="스크린샷 2023-01-03 15 17 20" src="https://user-images.githubusercontent.com/100397903/210308154-3f73cda5-ce80-44bd-9f8a-7bf7b602b052.png">
+  <img width="735" alt="스크린샷 2023-01-03 15 18 23" src="https://user-images.githubusercontent.com/100397903/210308243-bc862bd1-7e22-47a2-a13a-94e326912b2f.png">
+
+
+## buyer - 리뷰 작성시
+  - 평점이 5를 초과하면 abort하는 로직 추가
+  - 해당 주문의 각 메뉴에 대해 리뷰가 가능하고, 주문의 모든 메뉴에 대한 리뷰가 완료되었을 시, 주문의 전체 리뷰 여부를 true로 업데이트하는 로직 추가
+  
+## seller - 새로운 메뉴 데이터 추가시
+  - OrderedCount, Avg, Suggestion, IsVisible값을 각각 0, 0, false, true로 default 설정을 해 주어 새로운 메뉴 데이터 추가시 payload에 포함시키지 않도록 수정
+
+## seller - 메뉴 데이터 삭제시
+  - 메소드를 POST -> DELETE 로 변경
+  - 메뉴 데이터에 IsVisible 멤버변수를 추가하여 삭제시 플래그를 활용하여 visible을 false로 변경 + 데이터를 조회할 때 기본적으로 IsVisible이 true인 데이터만 가져오도록 설정
+  
