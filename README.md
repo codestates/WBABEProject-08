@@ -6,8 +6,7 @@ https://quilt-stoplight-9b6.notion.site/Docs-0c6140c809904bdcb46a41fbbea48369
 # 피드백 반영 개선사항
 
 ## 피드백
-
-<img width="608" alt="스크린샷 2023-01-03 15 57 25" src="https://user-images.githubusercontent.com/100397903/210312027-5b390114-d593-40e0-a64f-580c652e046a.png">
+<img width="607" alt="스크린샷 2023-01-03 16 14 45" src="https://user-images.githubusercontent.com/100397903/210313748-5e0e35d5-1057-4511-b809-7860839a8e3f.png">
 <img width="610" alt="스크린샷 2023-01-03 15 57 37" src="https://user-images.githubusercontent.com/100397903/210312054-a3698710-97bf-4cb5-9134-edead7f68b24.png">
   
 ## buyer - 주문하기
