@@ -32,6 +32,8 @@ swagger 파일을 만들어준다
 * 일별 주문번호의 정상적인 count를 위해선 orderedlist 컬렉션에 아래와 같이 {daycount : 0} 의 데이터를 먼저 넣어주어야 한다.
 <img width="233" alt="스크린샷 2022-12-28 13 28 09" src="https://user-images.githubusercontent.com/100397903/209757411-95b2d6be-b243-43b6-9817-aa1241f958f1.png">
 <img width="992" alt="스크린샷 2022-12-28 13 26 10" src="https://user-images.githubusercontent.com/100397903/209757348-eee6a96a-af9c-4291-98d2-aa07c86fbb8b.png">
+- 이후 controller/buyercontroller.go 파일 상단의 daycountID 상수를 생성된 daycount Document의 ObjectId로 변경해줄 
+<img width="578" alt="스크린샷 2023-01-03 15 45 17" src="https://user-images.githubusercontent.com/100397903/210310815-090f3766-eacb-477d-868b-832464c109f7.png">
 
 ## 프로그램 실행방법
 제공하는 기능의 api 리스트는 아래와 같다.
