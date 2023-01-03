@@ -43,7 +43,7 @@ go run main.go
   <img width="233" alt="스크린샷 2022-12-28 13 28 09" src="https://user-images.githubusercontent.com/100397903/209757411-95b2d6be-b243-43b6-9817-aa1241f958f1.png">
   <img width="992" alt="스크린샷 2022-12-28 13 26 10" src="https://user-images.githubusercontent.com/100397903/209757348-eee6a96a-af9c-4291-98d2-aa07c86fbb8b.png">
 
-* 이후 controller/buyercontroller.go 파일 상단의 daycountID 상수를 생성된 daycount Document의 ObjectId로 변경해줄
+* 이후 controller/buyercontroller.go 파일 상단의 daycountID 상수를 생성된 daycount Document의 ObjectId로 변경해준다.
   <img width="578" alt="스크린샷 2023-01-03 15 45 17" src="https://user-images.githubusercontent.com/100397903/210310815-090f3766-eacb-477d-868b-832464c109f7.png">
 
 ### 코드 구성
@@ -54,6 +54,7 @@ https://quilt-stoplight-9b6.notion.site/Docs-0c6140c809904bdcb46a41fbbea48369
 # 피드백 반영 개선사항
 
 ## 피드백
+
 <img width="607" alt="스크린샷 2023-01-03 16 14 45" src="https://user-images.githubusercontent.com/100397903/210313748-5e0e35d5-1057-4511-b809-7860839a8e3f.png">
 <img width="610" alt="스크린샷 2023-01-03 15 57 37" src="https://user-images.githubusercontent.com/100397903/210312054-a3698710-97bf-4cb5-9134-edead7f68b24.png">
   
