@@ -107,6 +107,11 @@ https://quilt-stoplight-9b6.notion.site/Docs-0c6140c809904bdcb46a41fbbea48369
 
 # 피드백 반영 개선사항
 
+  
+## 피드백
+<img width="608" alt="스크린샷 2023-01-03 15 57 25" src="https://user-images.githubusercontent.com/100397903/210312027-5b390114-d593-40e0-a64f-580c652e046a.png">
+<img width="610" alt="스크린샷 2023-01-03 15 57 37" src="https://user-images.githubusercontent.com/100397903/210312054-a3698710-97bf-4cb5-9134-edead7f68b24.png">
+  
 ## buyer - 주문하기
   - 메뉴를 주문, 추가, 변경할 때 수량을 기입할 수 있도록 수정
   - 주문과 관련하여 메뉴 추가, 변경, 새 주문시 각 메뉴의 현재 주문 가능한 Limit을 확인하고 그 이상일 경우 abort하는 로직 전체적으로 추가
