@@ -130,11 +130,15 @@ https://quilt-stoplight-9b6.notion.site/Docs-0c6140c809904bdcb46a41fbbea48369
     <img width="735" alt="스크린샷 2023-01-03 15 27 29" src="https://user-images.githubusercontent.com/100397903/210309091-3079789d-2c77-42c5-b17a-cc38d7c8e880.png">
 
 
-  
 ## seller - 새로운 메뉴 데이터 추가시
-  - OrderedCount, Avg, Suggestion, IsVisible값을 각각 0, 0, false, true로 default 설정을 해 주어 새로운 메뉴 데이터 추가시 payload에 포함시키지 않도록 수정
+  - OrderedCount, Avg, Suggestion, IsVisible값을 각각 0, 0, false, true로 default 설정을 해 주어 새로운 메뉴 데이터 추가시 payload에서 제외
+    <img width="719" alt="스크린샷 2023-01-03 15 30 02" src="https://user-images.githubusercontent.com/100397903/210309335-0717b78b-3885-4c48-969d-e49a2844dd79.png">
+
 
 ## seller - 메뉴 데이터 삭제시
   - 메소드를 POST -> DELETE 로 변경
   - 메뉴 데이터에 IsVisible 멤버변수를 추가하여 삭제시 플래그를 활용하여 visible을 false로 변경 + 데이터를 조회할 때 기본적으로 IsVisible이 true인 데이터만 가져오도록 설정
-  
+    <img width="966" alt="스크린샷 2023-01-03 15 39 25" src="https://user-images.githubusercontent.com/100397903/210310262-3a36b8a8-5090-48c2-a464-827c17da885e.png">
+    <img width="988" alt="스크린샷 2023-01-03 15 40 36" src="https://user-images.githubusercontent.com/100397903/210310360-0af5c3c7-53ec-4b7f-b641-2e7e63886ff7.png">
+
+
